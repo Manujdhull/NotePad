@@ -8,5 +8,4 @@ export class User {
   userName:string;
   @Column()
   password:string;
-
 }
