@@ -2,7 +2,7 @@ import { Injectable, Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { UserModel } from '../databases/users.model/user.model';
+import { UserModel } from '../databases/models/user.model';
 // import { Users } from './users';
 // import {ValidationPipe} from './validation/validation.pipe'
 

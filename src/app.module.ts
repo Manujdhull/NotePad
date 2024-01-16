@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { NotesModule } from './notes/notes.module';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { UserModel } from './databases/users.model/user.model';
+import { UserModel } from './databases/models/user.model';
 import { UsersController } from './users/users.controller';
 
 @Module({
@@ -21,7 +21,7 @@ import { UsersController } from './users/users.controller';
       models: [UserModel],
     }),
   ],
-  controllers: [AppController, UsersController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

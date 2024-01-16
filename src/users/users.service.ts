@@ -1,6 +1,6 @@
 import { Injectable, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { UserModel } from '../databases/users.model/user.model';
+import { UserModel } from '../databases/models/user.model';
 
 @Injectable()
 export class UsersService {
@@ -11,7 +11,7 @@ export class UsersService {
 
   public async create(
     user: Pick<UserModel, 'username' | 'password'>,
-  ): Promise<string | Promise<UserModel>> {
+  ): Promise<string | UserModel> {
     // console.log(user);
     const userName = user.username;
     // console.log(userName,"username mae hu");
@@ -23,7 +23,8 @@ export class UsersService {
     });
     if (!data) {
       return this.userModel
-        .build({ username: userName, password: Password })
+        .build()
+        .setAttributes({ username: userName, password: Password })
         .save();
     }
     return `username:${userName} already exists`;
