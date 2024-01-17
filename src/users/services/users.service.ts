@@ -1,6 +1,6 @@
 import { Injectable, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { UserModel } from '../databases/models/user.model';
+import { UserModel } from '../../databases/models/user.model';
 
 @Injectable()
 export class UsersService {
@@ -9,26 +9,11 @@ export class UsersService {
     public userModel: typeof UserModel,
   ) {}
 
-  public async create(
-    user: Pick<UserModel, 'username' | 'password'>,
-  ): Promise<string | UserModel> {
-    // console.log(user);
-    const userName = user.username;
-    // console.log(userName,"username mae hu");
-    const Password = user.password;
-    const data = await this.userModel.findOne({
-      where: {
-        username: userName,
-      },
-    });
-    if (!data) {
-      return this.userModel
-        .build()
-        .setAttributes({ username: userName, password: Password })
-        .save();
-    }
-    return `username:${userName} already exists`;
-    // .set({username:userName,password:Password})
+  public async create(username: string, password: string): Promise<UserModel> {
+    return this.userModel
+      .build()
+      .setAttributes({ username: username, password: password })
+      .save();
   }
 
   // getting all data of user only username
@@ -64,6 +49,14 @@ export class UsersService {
     return await this.userModel.destroy({
       where: {
         id: id,
+      },
+    });
+  }
+
+  find(username: string) {
+    return this.userModel.findOne({
+      where: {
+        username: username,
       },
     });
   }

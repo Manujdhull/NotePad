@@ -1,10 +1,11 @@
-import { IsString } from 'class-validator';
-import { UserModel } from '../../databases/models/user.model';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class UserDtoSignUp {
+  @IsNotEmpty()
   @IsString()
-  username: string;
+  public username: string;
 
+  @IsNotEmpty()
   @IsString()
-  password: string;
+  public password: string;
 }

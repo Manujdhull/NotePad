@@ -9,45 +9,45 @@ import {
   ValidationPipe,
   UsePipes,
   Param,
-  Headers,
-  UseInterceptors,
-  ClassSerializerInterceptor,
+  Headers
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UserDtoSignUp } from './dtos/users.signup.dto';
-import {UsersList} from './dtos/usersList.fetching.dto'
-// import { UserModel } from 'src/databases/users.model/user.model';
-// import { UsersList } from './dto/usersList.fetching.dto';
+import { UsersService } from '../services/users.service';
+import { UserDtoSignUp } from '../dtos/users.signup.dto';
+import { UserDtoLogin } from '../dtos/users.login.dto';
+import { UsersList } from '../dtos/usersList.fetching.dto';
+import { AuthService } from '../Authentication/auth.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
-  // using pipe for validations WhiteList True ignore extra data
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
   // (transform:means structuring data as same of our dto)
 
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Post('signUp')
-  async create(@Body() userDtoSignUp: UserDtoSignUp): Promise<object | string> {
-    console.log(userDtoSignUp instanceof UserDtoSignUp);
-    return this.usersService.create(userDtoSignUp);
+  async create(@Body() body: UserDtoSignUp): Promise<object | string> {
+    return this.authService.signup(body.username, body.password);
+  }
+
+  @Post('signin')
+  signin(@Body() body: UserDtoLogin): Promise<object> {
+    return this.authService.signin(body.username, body.password);
   }
 
   // fetching all the users list in table
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Get('List')
-  async findAll(usersList:UsersList): Promise<string | object> {
+  async findAll(usersList: UsersList): Promise<string | object> {
     console.log('abscd', this.usersService);
-    // return this.usersService.create();
     return this.usersService.findAll();
   }
 
   // fetching data with specific id
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  // @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<string | object> {
-    // console.log('abscd', this.usersService);
-    // console.log("my id",id);
     const data = await this.usersService.findOne(id);
     return data;
   }
