@@ -6,7 +6,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { Exclude } from 'class-transformer'
+import { Exclude } from 'class-transformer';
 
 @Table
 export class UserModel extends Model {
@@ -20,11 +20,11 @@ export class UserModel extends Model {
 
   @Column
   @Exclude()
-  password: string;
+  public password: string;
 
   @Column
-  createdAt: Date;
+  public createdAt: Date;
 
   @Column
-  updatedat: Date;
+  public updatedAt: Date;
 }

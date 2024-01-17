@@ -1,7 +1,12 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { AutoIncrement, Column, ForeignKey, Model, PrimaryKey, Table } from 'sequelize-typescript';
 
 @Table
 export class NotesModel extends Model {
+  @PrimaryKey
+  @AutoIncrement
+  @Column
+  public id: number;
+
   @Column
   username: string;
 
@@ -10,4 +15,10 @@ export class NotesModel extends Model {
 
   @Column({ allowNull: false })
   Body: string;
+
+  @Column
+  public createdAt: Date;
+
+  @Column
+  public updatedAt: Date;
 }
