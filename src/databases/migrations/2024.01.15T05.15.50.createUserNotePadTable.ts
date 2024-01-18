@@ -10,11 +10,11 @@ export const up: Migration = async ({ context: sequelize }) => {
       autoIncrement: true,
     },
     username: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'UserModels',
-        key: 'username',
+        key: 'id',
       },
     },
     Title: {
@@ -26,10 +26,10 @@ export const up: Migration = async ({ context: sequelize }) => {
       allowNull: false,
     },
     createdAt: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
     },
     updatedAt: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
     },
   });
 };
