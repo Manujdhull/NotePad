@@ -1,6 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { CheckUserExists } from '../Validations/checkUserExists.validation';
-import {CheckPasswordMatch} from '../Validations/checkPasswordMatch.validation'
 export class UserDtoSignUp {
   @IsNotEmpty()
   @IsString()
@@ -11,6 +10,5 @@ export class UserDtoSignUp {
 
   @IsNotEmpty()
   @IsString()
-  @CheckPasswordMatch()
   public password: string;
 }

@@ -11,9 +11,9 @@ import {
   export class CheckPasswordMatchValidator implements ValidatorConstraintInterface {
     constructor(private usersService: UsersService) {}
     validate(password: any, args: ValidationArguments): Promise<boolean> {
-      return this.usersService.find(password).then((user) => {
-        if (user) return false;
-        return true;
+      return this.usersService.findPassword(password).then((pass) => {
+        if (pass) return true;
+        return false;
       });
     }
     defaultMessage(args: ValidationArguments) {

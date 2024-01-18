@@ -19,11 +19,8 @@ export class UsersService {
   }
 
   // getting all data of user only username
-  public async findAll(): Promise<UserModel[] | string> {
-    const data = this.userModel.findAll();
-    if (!data) {
-      return `no data present`;
-    }
+  public async findAll(): Promise<UserModel[]> {
+    const data = await this.userModel.findAll();
     return data;
   }
 
@@ -51,6 +48,14 @@ export class UsersService {
     return this.userModel.findOne({
       where: {
         username: username,
+      },
+    });
+  }
+
+  public findPassword(password: string): Promise<UserModel> {
+    return this.userModel.findOne({
+      where: {
+        password: password,
       },
     });
   }

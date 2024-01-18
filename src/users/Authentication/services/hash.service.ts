@@ -3,7 +3,7 @@ import { UsersService } from 'src/users/services/users.service';
 import * as bcrypt from 'bcrypt';
 import { UserModel } from 'src/databases/models/user.model';
 
-// @Injectable()
+@Injectable()
 export class HashService {
   constructor(private usersService: UsersService) {}
 

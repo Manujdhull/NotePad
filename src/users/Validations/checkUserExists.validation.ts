@@ -18,7 +18,7 @@ export class CheckUserExistsValidator implements ValidatorConstraintInterface {
   }
   defaultMessage(args: ValidationArguments) {
     // here you can provide default error message if validation failed
-    return 'Text ($value) is too short or too long!';
+    return 'username ($value) is already exists';
   }
 }
 

@@ -14,17 +14,8 @@ export class NotesService {
   public async findAll(): Promise<NotesModel[]> {
     return this.notesModel.findAll();
   }
-  public async create(
-    createNotesDto: NotesDto,
-    id: number,
-  ): Promise<NotesModel> {
-    const title: string = createNotesDto.title;
-    const body: string = createNotesDto.body;
-    const user: NotesModel = await this.notesModel
-      .build()
-      .set({ title: title, body: body, userid: id })
-      .save();
-    return user;
+  public async create(body:string,title:string){
+
   }
   public async deleteAll(id: number): Promise<number> {
     return await this.notesModel.destroy({

@@ -41,15 +41,15 @@ export class UsersController {
   }
 
   // fetching all the users list in table
-  @UsePipes(new ValidationPipe())
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Get('list')
-  public async findAll(usersList: UsersList): Promise<string | object> {
+  public async findAll(usersList: UsersList): Promise<UserModel[]> {
     console.log('abscd', this.usersService);
-    return this.usersService.findAll();
+    return await this.usersService.findAll();
   }
 
   // fetching data with specific id
-  @UsePipes(new ValidationPipe())
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Get(':id')
   public async findOne(
     @Param('id', ParseIntPipe, MapToUserPipe) user: UserModel,
@@ -58,7 +58,7 @@ export class UsersController {
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UsePipes(new ValidationPipe())
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Delete(':id')
   public async destroy(
     @Param('id', ParseIntPipe, MapToUserPipe) user: UserModel,
