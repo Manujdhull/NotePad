@@ -1,27 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserModel } from '../../databases/models/user.model';
-import { HashService } from '../Authentication/services/hash.service';
-
+import {HashService} from '../../authentication/services/hash.service'
 @Injectable()
 export class UsersService {
   constructor(
-    private hashService: HashService,
     @InjectModel(UserModel)
     private userModel: typeof UserModel,
-  ) {}
+    private hashService:HashService 
+  ) { }
 
-  public async create(username: string, password: string): Promise<UserModel> {
+  public async create(username: string, Password: string): Promise<UserModel> {
+    const password=await this.hashService.hashGenerator(Password)
     return this.userModel
       .build()
       .setAttributes({ username: username, password: password })
       .save();
   }
 
-  // getting all data of user only username
+  // getting all users
   public async findAll(): Promise<UserModel[]> {
-    const data = await this.userModel.findAll();
-    return data;
+    return await this.userModel.findAll();
   }
 
   /**
@@ -31,47 +30,24 @@ export class UsersService {
    */
   async findOne(id: number): Promise<UserModel> {
     return this.userModel
-      .findOne({
-        where: {
-          id: id,
-        },
-      })
-      .then((data) => (!!data ? data : null));
+      .findByPk(id)
+      .then((data) => (data || null));
   }
 
-  // remove data with id
+  /**
+   * Removes a user
+   * @param user 
+   * @returns 
+   */
   async destroy(user: UserModel): Promise<void> {
     return user.destroy();
   }
 
-  public find(username: string): Promise<UserModel> {
+  public findByUsername(username: string): Promise<UserModel> {
     return this.userModel.findOne({
       where: {
         username: username,
       },
     });
-  }
-
-  public findPassword(password: string): Promise<UserModel> {
-    return this.userModel.findOne({
-      where: {
-        password: password,
-      },
-    });
-  }
-
-  public async signup(username: string, pass: string): Promise<UserModel> {
-    // see if user exists
-    const hash: string = await this.hashService.hashGenerator(pass);
-    const userCreated: Promise<UserModel> = this.create(username, hash);
-    return userCreated;
-  }
-
-  public async signin(username: string, password: string): Promise<any> {
-    const user: Promise<UserModel> = this.hashService.hashMatch(
-      username,
-      password,
-    );
-    return user;
   }
 }

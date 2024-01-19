@@ -3,34 +3,41 @@ import { DataTypes } from 'sequelize';
 
 export const up: Migration = async ({ context: sequelize }) => {
   await sequelize.getQueryInterface().createTable('Notes', {
+    
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
-    username: {
+
+    userid: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      // allowNull: false,
       references: {
         model: 'UserModels',
         key: 'id',
       },
     },
+
     Title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
     Body: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
     createdAt: {
       type: DataTypes.DATE,
     },
+
     updatedAt: {
       type: DataTypes.DATE,
     },
+
   });
 };
 

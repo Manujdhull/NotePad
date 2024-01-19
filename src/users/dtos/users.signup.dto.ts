@@ -4,7 +4,7 @@ export class UserDtoSignUp {
   @IsNotEmpty()
   @IsString()
   @CheckUserExists({
-    // message: 'User  already exists. Choose another name.',
+    message: 'User  already exists. Choose another name.',
   })
   public username: string;
 

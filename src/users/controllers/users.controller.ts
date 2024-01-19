@@ -2,23 +2,17 @@ import {
   Controller,
   Get,
   Post,
-  Put,
-  Patch,
   Delete,
   Body,
   ValidationPipe,
   UsePipes,
   Param,
-  Headers,
   ParseIntPipe,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { UserDtoSignUp } from '../dtos/users.signup.dto';
-import { UserDtoLogin } from '../dtos/users.login.dto';
-import { UsersList } from '../dtos/usersList.fetching.dto';
-import { AuthService } from '../Authentication/services/token.service';
 import { MapToUserPipe } from '../pipes/map-to-user/map-to-user.pipe';
 import { UserModel } from 'src/databases/models/user.model';
 
@@ -26,24 +20,18 @@ import { UserModel } from 'src/databases/models/user.model';
 export class UsersController {
   constructor(
     private usersService: UsersService
-  ) {}
+  ) { }
   // (transform:means structuring data as same of our dto)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Post('signup')
   public async create(@Body() body: UserDtoSignUp): Promise<UserModel> {
-    return this.usersService.signup(body.username, body.password);
-  }
-
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @Post('signin')
-  public signin(@Body() body: UserDtoLogin): Promise<UserModel> {
-    return this.usersService.signin(body.username, body.password);
+    return this.usersService.create(body.username, body.password);
   }
 
   // fetching all the users list in table
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Get('list')
-  public async findAll(usersList: UsersList): Promise<UserModel[]> {
+  public async findAll(): Promise<UserModel[]> {
     console.log('abscd', this.usersService);
     return await this.usersService.findAll();
   }

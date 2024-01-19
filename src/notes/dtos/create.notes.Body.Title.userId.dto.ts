@@ -2,11 +2,11 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class CreateNotesDto {
   @IsString()
-  public title: string;
+  public Title: string;
 
   @IsString()
-  public body: string;
+  public Body: string;
 
   @IsNumber()
-  public userId: number;
+  public userid: number;
 }
