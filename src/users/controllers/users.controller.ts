@@ -22,17 +22,19 @@ export class UsersController {
     private usersService: UsersService
   ) { }
   // (transform:means structuring data as same of our dto)
+  // whitelist true means ignoring extra data
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Post('signup')
   public async create(@Body() body: UserDtoSignUp): Promise<UserModel> {
-    return this.usersService.create(body.username, body.password);
+    // return this.usersService.create(body.username, body.password);
+    return this.usersService.createUser(body);
   }
 
   // fetching all the users list in table
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Get('list')
   public async findAll(): Promise<UserModel[]> {
-    console.log('abscd', this.usersService);
+    // console.log('abscd', this.usersService);
     return await this.usersService.findAll();
   }
 

@@ -2,7 +2,6 @@ import { NotesModel } from '../../databases/models/notes.model';
 
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { NotesDto } from '../dtos/create.notes.Body.Title.dto';
 
 @Injectable()
 export class NotesService {
@@ -29,16 +28,22 @@ export class NotesService {
     return this.notesModel.findAll();
   }
 
-  // public async findOne(id): Promise<NotesModel> {
-  //   return this.notesModel.findByPk(id);
-  // }
-
+  /**
+   * find specigic notes by id
+   * @param id 
+   * @returns Promise<NotesModel>
+   */
   async findOne(id: number):Promise<NotesModel> {
     return this.notesModel
       .findByPk(id)
       .then((data) => (data || null));
   }
 
+  /**
+   * delete all notes of loggedIn user
+   * @param id 
+   * @returns Promise<number>
+   */
   public async deleteAll(id: number): Promise<number> {
     return await this.notesModel.destroy({
       where: {
@@ -47,10 +52,20 @@ export class NotesService {
     });
   }
 
+  /**
+   * delete specific note of loggedIn user 
+   * @param notes 
+   * @returns Promise<void>
+   */
   public async destroy(notes:NotesModel): Promise<void> {
     return notes.destroy();
   }
 
+  /**
+   * update logged In user notes details
+   * @param userDataToUpdate 
+   * @param userNewData 
+   */
   public async updateRecord(userDataToUpdate:Pick<NotesModel,'Title'|'Body'>,userNewData:Pick<NotesModel,'Title'|'Body'>):Promise<void>{
     userDataToUpdate.Body=userNewData.Body
     userDataToUpdate.Title=userNewData.Title

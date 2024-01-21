@@ -11,7 +11,9 @@ import {
   UseGuards,
   Put,
   HttpCode,
-  ParseIntPipe
+  ParseIntPipe,
+  UsePipes,
+  ValidationPipe
 } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common';
 import { NotesService } from '../services/notes.service';
@@ -32,6 +34,7 @@ export class NotesController {
    * @param notesModel 
    * @returns Promise<NotesModel[]>
    */
+  @UsePipes(new ValidationPipe({transform:true}))
   @Get()
   findAll(notesModel: NotesModel): Promise<NotesModel[]> {
     return this.notesService.findAll();
@@ -42,6 +45,7 @@ export class NotesController {
    * @param id 
    * @returns Promise<NotesModel>
    */
+  @UsePipes(new ValidationPipe({transform:true}))
   @Get(':id')
   findOne(@Param('id') id: number): Promise<NotesModel> {
     return this.notesService.findOne(id);
@@ -53,10 +57,10 @@ export class NotesController {
    * @param authuser 
    * @returns Promise<NotesModel>
    */
+  @UsePipes(new ValidationPipe({transform:true,whitelist:true}))
   @Post('write')
   async create(@Body() notesDto: NotesDto, @AuthUser() authuser: UserModel): Promise<NotesModel> {
     console.log("this is authuser id", authuser.id)
-
     return this.notesService.create(authuser.id, notesDto);
   }
 
@@ -65,6 +69,7 @@ export class NotesController {
    * @param id
    * @returns Promise<void>
    */
+  @UsePipes(new ValidationPipe({transform:true,whitelist:true}))
   @HttpCode(HttpStatus.OK)
   @Delete(':id')
   public async deleteAllNotes(@Param('id') id: number): Promise<void> {
@@ -76,6 +81,7 @@ export class NotesController {
    * @param id 
    * @returns Promise<number>
    */
+  @UsePipes(new ValidationPipe({transform:true,whitelist:true}))
   @HttpCode(HttpStatus.OK)
   @Delete(':id')
   public async deleteNote(@Param('id',ParseIntPipe,MapToUserNotesPipe)notes:NotesModel ):Promise<void>{
@@ -88,6 +94,7 @@ export class NotesController {
    * @param body 
    * @returns 
    */
+  @UsePipes(new ValidationPipe({transform:true,whitelist:true}))
   @Put(':id')
   public async editNote(@Param('id',ParseIntPipe,MapToUserNotesPipe)notes:NotesModel,@Body()body:NotesDto ):Promise<void>{
     return await this.notesService.updateRecord(notes,body);

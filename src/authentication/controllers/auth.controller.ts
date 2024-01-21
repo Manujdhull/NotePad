@@ -24,7 +24,7 @@ export class AuthController {
     console.log(userDtoLogin);
     
     const data= await this.authService.signIn(userDtoLogin.username, userDtoLogin.password);
-    console.log("data os controller",data)
+    console.log("data of controller",data)
     return data;
   }
 

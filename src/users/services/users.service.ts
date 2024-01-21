@@ -10,11 +10,11 @@ export class UsersService {
     private hashService:HashService 
   ) { }
 
-  public async create(username: string, Password: string): Promise<UserModel> {
-    const password=await this.hashService.hashGenerator(Password)
+  public async createUser(data): Promise<UserModel> {
+    const password=await this.hashService.hashGenerator(data.Password)
     return this.userModel
       .build()
-      .setAttributes({ username: username, password: password })
+      .setAttributes({ username: data.username, password: password })
       .save();
   }
 

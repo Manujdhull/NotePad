@@ -3,14 +3,11 @@ import {  IsNotEmpty, IsNumber} from 'class-validator';
 
 export class ShareDto {
 
-  // @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  shared_note_id : number;
+  sharedUserId : number;
 
-  // @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  shared_to_user_id : number;
-
+  sharedToUserId : number;
 }
