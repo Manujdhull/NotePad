@@ -34,7 +34,7 @@ export class AuthService {
         }),
       };
       console.log(accesToken.access_token, 'my accesstoken');
-      return 'mauj';
+      return accesToken.access_token;
     } else {
       return 'User doesnot exist';
     }

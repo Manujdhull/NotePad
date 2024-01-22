@@ -17,14 +17,15 @@ import { UserDtoSignUp } from '../dtos/users.signup.dto';
 import { MapToUserPipe } from '../pipes/map-to-user/map-to-user.pipe';
 import { UserModel } from 'src/databases/models/user.model';
 
+// @ApiTags('user')
 @Controller('user')
 export class UsersController {
   constructor(private usersService: UsersService) {}
   // (transform:means structuring data as same of our dto)
   // whitelist true means ignoring extra data
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @Post('signup')
-  @Render('login')
+  @Post('signUp')
+  // @Render('login')
   public async create(@Body() body: UserDtoSignUp): Promise<UserModel> {
     // console.log(body);
     // return this.usersService.create(body.username, body.password);
@@ -57,3 +58,7 @@ export class UsersController {
     return this.usersService.destroy(user);
   }
 }
+function ApiTags(arg0: string): (target: typeof UsersController) => void | typeof UsersController {
+  throw new Error('Function not implemented.');
+}
+
