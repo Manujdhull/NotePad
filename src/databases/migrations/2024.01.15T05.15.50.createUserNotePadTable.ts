@@ -3,7 +3,6 @@ import { DataTypes } from 'sequelize';
 
 export const up: Migration = async ({ context: sequelize }) => {
   await sequelize.getQueryInterface().createTable('Notes', {
-    
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -32,12 +31,13 @@ export const up: Migration = async ({ context: sequelize }) => {
 
     createdAt: {
       type: DataTypes.DATE,
+      default: DataTypes.NOW(),
     },
 
     updatedAt: {
       type: DataTypes.DATE,
+      default: DataTypes.NOW(),
     },
-
   });
 };
 

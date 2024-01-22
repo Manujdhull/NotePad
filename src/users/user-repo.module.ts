@@ -8,9 +8,13 @@ import { CheckUserExistsValidator } from './Validations/checkUserExists.validati
 import { HashRepoModule } from 'src/authentication/hash-repo.module';
 
 @Module({
-    imports: [SequelizeModule.forFeature([UserModel]), HashRepoModule],
-    controllers: [UsersController],
-    providers: [UsersService, CheckPasswordMatchValidator, CheckUserExistsValidator],
-    exports: [UsersService]
+  imports: [SequelizeModule.forFeature([UserModel]), HashRepoModule],
+  controllers: [UsersController],
+  providers: [
+    UsersService,
+    CheckPasswordMatchValidator,
+    CheckUserExistsValidator,
+  ],
+  exports: [UsersService],
 })
-export class UserRepoModule { }
+export class UserRepoModule {}

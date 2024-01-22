@@ -8,10 +8,15 @@ import {
 import { UsersService } from '../services/users.service';
 
 @ValidatorConstraint({ async: true })
-export class CheckPasswordMatchValidator implements ValidatorConstraintInterface {
-  constructor(private usersService: UsersService) { }
-  public async validate(password: any, args: ValidationArguments): Promise<boolean> {
-    return true
+export class CheckPasswordMatchValidator
+  implements ValidatorConstraintInterface
+{
+  constructor(private usersService: UsersService) {}
+  public async validate(
+    password: any,
+    args: ValidationArguments,
+  ): Promise<boolean> {
+    return true;
   }
   public defaultMessage(args: ValidationArguments): string {
     // here you can provide default error message if validation failed

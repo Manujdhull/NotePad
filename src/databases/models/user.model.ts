@@ -1,12 +1,14 @@
 import {
   AutoIncrement,
   Column,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
 
 import { Exclude } from 'class-transformer';
+import { NotesModel } from './notes.model';
 
 @Table
 export class UserModel extends Model {

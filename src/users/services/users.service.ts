@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserModel } from '../../databases/models/user.model';
-import {HashService} from '../../authentication/services/hash.service'
+import { HashService } from '../../authentication/services/hash.service';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(UserModel)
     private userModel: typeof UserModel,
-    private hashService:HashService 
-  ) { }
+    private hashService: HashService,
+  ) {}
 
   public async createUser(data): Promise<UserModel> {
-    const password=await this.hashService.hashGenerator(data.Password)
+    console.log(data, 'data of create user');
+    const password = await this.hashService.hashGenerator(data.password);
     return this.userModel
       .build()
       .setAttributes({ username: data.username, password: password })
@@ -29,15 +30,13 @@ export class UsersService {
    * @returns Promise<UserModel>
    */
   async findOne(id: number): Promise<UserModel> {
-    return this.userModel
-      .findByPk(id)
-      .then((data) => (data || null));
+    return this.userModel.findByPk(id).then((data) => data || null);
   }
 
   /**
    * Removes a user
-   * @param user 
-   * @returns 
+   * @param user
+   * @returns
    */
   async destroy(user: UserModel): Promise<void> {
     return user.destroy();

@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import {CheckPasswordMatch} from '../Validations/checkPasswordMatch.validation'
+import { CheckPasswordMatch } from '../Validations/checkPasswordMatch.validation';
 import { CheckUserExists } from '../Validations/checkUserExists.validation';
 export class UserDtoLogin {
   @IsNotEmpty()

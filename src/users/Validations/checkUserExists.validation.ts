@@ -9,7 +9,7 @@ import { UsersService } from '../services/users.service';
 
 @ValidatorConstraint({ async: true })
 export class CheckUserExistsValidator implements ValidatorConstraintInterface {
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService) {}
   validate(username: any, args: ValidationArguments): Promise<boolean> {
     return this.usersService.findByUsername(username).then((user) => {
       if (user) return false;

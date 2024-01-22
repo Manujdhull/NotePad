@@ -4,9 +4,11 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class HashService {
   public async hashGenerator(pass: string) {
-    const saltOrRounds = 10;
+    console.log('password', pass);
     const password = pass;
-    const hash = await bcrypt.hash(password, saltOrRounds);
+    const salt: string = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(password, salt);
+    console.log(hash);
     return hash;
   }
 

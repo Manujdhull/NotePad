@@ -5,7 +5,6 @@ import { MapToUserPipe } from './pipes/map-to-user/map-to-user.pipe';
 
 @Module({
   imports: [UserRepoModule],
-  controllers: [UsersController]
- 
+  controllers: [UsersController],
 })
-export class UsersModule { }
+export class UsersModule {}

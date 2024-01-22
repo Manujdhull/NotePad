@@ -8,15 +8,18 @@ export class NotesService {
   constructor(
     @InjectModel(NotesModel)
     private readonly notesModel: typeof NotesModel,
-  ) { }
+  ) {}
 
   /**
    * create notes of logged in user
-   * @param id 
-   * @param data 
+   * @param id
+   * @param data
    * @returns Promise<NotesModel>
    */
-  public async create(id: number, data: Pick<NotesModel, 'Title' | 'Body'>):Promise<NotesModel> {
+  public async create(
+    id: number,
+    data: Pick<NotesModel, 'Title' | 'Body'>,
+  ): Promise<NotesModel> {
     return this.notesModel.build().set(data).set({ userid: id }).save();
   }
 
@@ -30,18 +33,16 @@ export class NotesService {
 
   /**
    * find specigic notes by id
-   * @param id 
+   * @param id
    * @returns Promise<NotesModel>
    */
-  async findOne(id: number):Promise<NotesModel> {
-    return this.notesModel
-      .findByPk(id)
-      .then((data) => (data || null));
+  async findOne(id: number): Promise<NotesModel> {
+    return this.notesModel.findByPk(id).then((data) => data || null);
   }
 
   /**
    * delete all notes of loggedIn user
-   * @param id 
+   * @param id
    * @returns Promise<number>
    */
   public async deleteAll(id: number): Promise<number> {
@@ -53,21 +54,24 @@ export class NotesService {
   }
 
   /**
-   * delete specific note of loggedIn user 
-   * @param notes 
+   * delete specific note of loggedIn user
+   * @param notes
    * @returns Promise<void>
    */
-  public async destroy(notes:NotesModel): Promise<void> {
+  public async destroy(notes: NotesModel): Promise<void> {
     return notes.destroy();
   }
 
   /**
    * update logged In user notes details
-   * @param userDataToUpdate 
-   * @param userNewData 
+   * @param userDataToUpdate
+   * @param userNewData
    */
-  public async updateRecord(userDataToUpdate:Pick<NotesModel,'Title'|'Body'>,userNewData:Pick<NotesModel,'Title'|'Body'>):Promise<void>{
-    userDataToUpdate.Body=userNewData.Body
-    userDataToUpdate.Title=userNewData.Title
+  public async updateRecord(
+    userDataToUpdate: Pick<NotesModel, 'Title' | 'Body'>,
+    userNewData: Pick<NotesModel, 'Title' | 'Body'>,
+  ): Promise<void> {
+    userDataToUpdate.Body = userNewData.Body;
+    userDataToUpdate.Title = userNewData.Title;
   }
 }

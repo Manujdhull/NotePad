@@ -8,7 +8,7 @@ import { AuthGuard } from 'src/authentication/guard/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [SequelizeModule.forFeature([NotesModel]),AuthModule,JwtModule],
+  imports: [SequelizeModule.forFeature([NotesModel]), AuthModule, JwtModule],
   controllers: [NotesController],
   providers: [NotesService],
   exports: [NotesService, SequelizeModule],

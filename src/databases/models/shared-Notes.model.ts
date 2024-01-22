@@ -1,16 +1,37 @@
-import {  IsNotEmpty, IsNumber} from 'class-validator';
-// import { ApiProperty } from '@nestjs/swagger';
+import {
+  BelongsTo,
+  Column,
+  ForeignKey,
+  Model,
+  PrimaryKey,
+  Scopes,
+  Table,
+} from 'sequelize-typescript';
+import { NotesModel } from './notes.model';
+import { UserModel } from './user.model';
 
-export class ShareDto {
+@Scopes(() => ({
+  withnoteuser: {
+    include: NotesModel,
+  },
+}))
+@Table({ tableName: 'SharedNotes' })
+export class SharedNoteModel extends Model {
+  @ForeignKey(() => NotesModel)
+  @Column
+  public sharedNoteId: number;
 
-  // @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  shared_note_id : number;
+  @ForeignKey(() => UserModel)
+  @Column
+  public sharedToUserId: number;
 
-  // @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  shared_to_user_id : number;
+  @PrimaryKey
+  @Column
+  id: number;
 
+  @Column
+  createdAt: Date;
+
+  @Column
+  updatedAt: Date;
 }

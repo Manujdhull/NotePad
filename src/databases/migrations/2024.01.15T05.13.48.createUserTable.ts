@@ -19,9 +19,11 @@ export const up: Migration = async ({ context: sequelize }) => {
     },
     createdAt: {
       type: DataTypes.DATE,
+      default: DataTypes.NOW(),
     },
     updatedAt: {
       type: DataTypes.DATE,
+      default: DataTypes.NOW(),
     },
   });
 };

@@ -11,8 +11,8 @@ import { UserModel } from 'src/databases/models/user.model';
 export class MapToUserPipe implements PipeTransform {
   constructor(private usersService: UsersService) {}
 
-  transform(id: number, metadata: ArgumentMetadata):Promise<UserModel> {
-    const user:Promise<UserModel> = this.usersService.findOne(id);
+  transform(id: number, metadata: ArgumentMetadata): Promise<UserModel> {
+    const user: Promise<UserModel> = this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException();
     }

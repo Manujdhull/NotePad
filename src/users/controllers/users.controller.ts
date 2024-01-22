@@ -10,6 +10,7 @@ import {
   ParseIntPipe,
   HttpCode,
   HttpStatus,
+  Render,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { UserDtoSignUp } from '../dtos/users.signup.dto';
@@ -18,14 +19,14 @@ import { UserModel } from 'src/databases/models/user.model';
 
 @Controller('user')
 export class UsersController {
-  constructor(
-    private usersService: UsersService
-  ) { }
+  constructor(private usersService: UsersService) {}
   // (transform:means structuring data as same of our dto)
   // whitelist true means ignoring extra data
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Post('signup')
+  @Render('login')
   public async create(@Body() body: UserDtoSignUp): Promise<UserModel> {
+    // console.log(body);
     // return this.usersService.create(body.username, body.password);
     return this.usersService.createUser(body);
   }
