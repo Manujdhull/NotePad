@@ -18,10 +18,13 @@ import { JwtService } from '@nestjs/jwt';
     UsersModule,
     NotesModule,
     AuthModule,
+    ConfigModule.forRoot({
+      envFilePath: join(process.cwd(), '.env'),
+    }),
     SequelizeModule.forRoot({
-      username: 'mackmanuj',
-      password: 'Rubi@123',
-      database: 'NotePad',
+      username: process.env.database_user,
+      password: process.env.database_password,
+      database: process.env.database_name,
       dialect: 'mysql',
       host: 'localhost',
       port: 3306,

@@ -7,13 +7,13 @@ export class AppController {
 
   @Get('user/signup')
   @Render('signup')
-  signup(@Res() res: Response) {
+  signup():{message:string} {
     return { message: 'Hello world!' };
   }
 
-  @Get('user/login')
-  @Render('login')
-  login() {
-    return { message: 'Hello world!' };
-  }
+  // @Get('user/login')
+  // @Render('login')
+  // login():{message:string} {
+  //   return { message: 'Hello world!' };
+  // }
 }

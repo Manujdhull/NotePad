@@ -4,6 +4,7 @@ import { useContainer } from 'class-validator';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -16,9 +17,10 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  // app.useStaticAssets(join(__dirname, '..', 'public'));
-  // app.setBaseViewsDir(join(process.cwd(), 'views'));
-  // app.setViewEngine('hbs');
+  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.setBaseViewsDir(join(process.cwd(), 'views'));
+  app.setViewEngine('hbs');
+  app.use(cookieParser());
 
   await app.listen(3000);
 }
