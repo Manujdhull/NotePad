@@ -14,6 +14,7 @@ import {
   ParseIntPipe,
   UsePipes,
   ValidationPipe,
+  Render,
 } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common';
 import { NotesService } from '../services/notes.service';
@@ -32,12 +33,20 @@ export class NotesController {
   /**
    *
    * @param notesModel
-   * @returns Promise<NotesModel[]>
+   * @returns : Promise<void>>
    */
   @UsePipes(new ValidationPipe({ transform: true }))
+  @Render('notes')
   @Get()
-  findAll(notesModel: NotesModel): Promise<NotesModel[]> {
-    return this.notesService.findAll();
+  public async onDisplay(@AuthUser() userModel: UserModel) {
+    const data = await this.notesService.getMyNotes(userModel.id);
+    // console.log(data,"data");
+    return { data: data };
+    // console.log("hello")
+  }
+
+  public async findAll(notesModel: NotesModel): Promise<void> {
+    console.log('hello');
   }
 
   /**
@@ -62,9 +71,10 @@ export class NotesController {
   async create(
     @Body() notesDto: NotesDto,
     @AuthUser() authuser: UserModel,
-  ): Promise<NotesModel> {
+  ): Promise<void> {
     console.log('this is authuser id', authuser.id);
-    return this.notesService.create(authuser.id, notesDto);
+    console.log(notesDto);
+    await this.notesService.create(authuser.id, notesDto);
   }
 
   /**
@@ -107,4 +117,17 @@ export class NotesController {
   ): Promise<void> {
     return await this.notesService.updateRecord(notes, body);
   }
+}
+function Redirect(
+  arg0: string,
+): (
+  target: NotesController,
+  propertyKey: 'findAll',
+  descriptor: TypedPropertyDescriptor<
+    (notesModel: NotesModel) => Promise<NotesModel[]>
+  >,
+) => void | TypedPropertyDescriptor<
+  (notesModel: NotesModel) => Promise<NotesModel[]>
+> {
+  throw new Error('Function not implemented.');
 }

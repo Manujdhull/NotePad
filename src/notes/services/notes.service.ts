@@ -24,6 +24,19 @@ export class NotesService {
   }
 
   /**
+   * getting all notes
+   * @param id
+   * @returns :Promise<NotesModel[]>
+   */
+  public async getMyNotes(id: number): Promise<NotesModel[]> {
+    return await this.notesModel.findAll({
+      where: {
+        userid: id,
+      },
+    });
+  }
+
+  /**
    * find list of notes
    * @returns Promise<NotesModel[]
    */
