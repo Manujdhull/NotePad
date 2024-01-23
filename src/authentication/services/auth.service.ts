@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../../users/services/users.service';
 import { HashService } from './hash.service';
+import { jwtConstants } from '../constants/auth.constants';
 @Injectable()
 export class AuthService {
   constructor(
@@ -31,6 +32,7 @@ export class AuthService {
       const accesToken = {
         access_token: await this.jwtService.signAsync(payload, {
           algorithm: 'HS256',
+          secret: jwtConstants.secret,
         }),
       };
       console.log(accesToken.access_token, 'my accesstoken');

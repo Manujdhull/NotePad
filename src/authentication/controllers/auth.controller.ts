@@ -6,15 +6,18 @@ import {
   HttpStatus,
   Post,
   Redirect,
+  Render,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '../guard/auth.guard';
+// import { AuthGuard } from '../guard/auth.guard';
 import { HashService } from '../services/hash.service';
 import { UserDtoLogin } from '../../users/dtos/users.login.dto';
 import { AuthService } from '../services/auth.service';
+import { Response } from 'express';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(
     private authService: AuthService,
@@ -22,21 +25,24 @@ export class AuthController {
   ) {}
 
   // @HttpCode(HttpStatus.OK)
-  @Post('signin')
-  public async signIn(@Body() userDtoLogin: UserDtoLogin) {
+  @Post('login')
+  // @Render('notes')
+  public async signIn(
+    @Body() userDtoLogin: UserDtoLogin,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<void> {
     console.log(userDtoLogin);
 
-    const data = await this.authService.signIn(
+    const token = await this.authService.signIn(
       userDtoLogin.username,
       userDtoLogin.password,
     );
-    console.log('data of controller', data);
-    return data;
+    console.log('data of controller', token);
+    response.cookie('authorization', token);
+    // return data;
+    response.redirect('./notes');
   }
-
-  @UseGuards(AuthGuard)
-  @Get('')
-  public getProfile(@Request() req: any): any {
-    return req.user;
-  }
+  @Render('login')
+  @Get('login')
+  public async Display() {}
 }

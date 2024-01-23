@@ -14,8 +14,8 @@ import { AuthGuard } from './guard/auth.guard';
     UserRepoModule,
     HashRepoModule,
     JwtModule.register({
-      // global: true,
-      secret: jwtConstants.secret,
+      global: true,
+      // secret: jwtConstants.secret,
       signOptions: { expiresIn: '360s' },
     }),
     // JwtModule.registerAsync({
