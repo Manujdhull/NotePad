@@ -15,6 +15,7 @@ import {
   UsePipes,
   ValidationPipe,
   Render,
+  Redirect
 } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common';
 import { NotesService } from '../services/notes.service';
@@ -44,7 +45,12 @@ export class NotesController {
     return { data: data };
     // console.log("hello")
   }
+  // Promise<{data:NotesModel[]}>
 
+  /**
+   * find all the notes of user in db
+   * @param notesModel 
+   */
   public async findAll(notesModel: NotesModel): Promise<void> {
     console.log('hello');
   }
@@ -68,6 +74,7 @@ export class NotesController {
    */
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Post('write')
+  @Redirect('/notes')
   async create(
     @Body() notesDto: NotesDto,
     @AuthUser() authuser: UserModel,
@@ -75,6 +82,7 @@ export class NotesController {
     console.log('this is authuser id', authuser.id);
     console.log(notesDto);
     await this.notesService.create(authuser.id, notesDto);
+    
   }
 
   /**
@@ -104,7 +112,7 @@ export class NotesController {
   }
 
   /**
-   *
+   * update notes of logged in user
    * @param id
    * @param body
    * @returns
@@ -117,17 +125,4 @@ export class NotesController {
   ): Promise<void> {
     return await this.notesService.updateRecord(notes, body);
   }
-}
-function Redirect(
-  arg0: string,
-): (
-  target: NotesController,
-  propertyKey: 'findAll',
-  descriptor: TypedPropertyDescriptor<
-    (notesModel: NotesModel) => Promise<NotesModel[]>
-  >,
-) => void | TypedPropertyDescriptor<
-  (notesModel: NotesModel) => Promise<NotesModel[]>
-> {
-  throw new Error('Function not implemented.');
 }
