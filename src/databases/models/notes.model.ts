@@ -25,7 +25,7 @@ export class NotesModel extends Model {
   Body: string;
 
   @Column
-  username: string;
+  userid: number;
 
   @Column
   public createdAt: Date;
