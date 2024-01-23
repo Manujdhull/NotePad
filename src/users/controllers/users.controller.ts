@@ -11,11 +11,13 @@ import {
   HttpCode,
   HttpStatus,
   Render,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { UserDtoSignUp } from '../dtos/users.signup.dto';
 import { MapToUserPipe } from '../pipes/map-to-user/map-to-user.pipe';
 import { UserModel } from 'src/databases/models/user.model';
+import { AuthGuard } from 'src/authentication/guard/auth.guard';
 
 // @ApiTags('user')
 @Controller('user')
@@ -25,13 +27,14 @@ export class UsersController {
   // whitelist true means ignoring extra data
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Post('signUp')
-  // @Render('login')
+  @Render('login')
   public async create(@Body() body: UserDtoSignUp): Promise<UserModel> {
-    // console.log(body);
+    console.log('my body in hbs sign up', body);
     // return this.usersService.create(body.username, body.password);
     return this.usersService.createUser(body);
   }
 
+  @UseGuards(AuthGuard)
   // fetching all the users list in table
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Get('list')
@@ -40,6 +43,7 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   // fetching data with specific id
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Get(':id')
@@ -49,6 +53,7 @@ export class UsersController {
     return user;
   }
 
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Delete(':id')
@@ -58,7 +63,8 @@ export class UsersController {
     return this.usersService.destroy(user);
   }
 }
-function ApiTags(arg0: string): (target: typeof UsersController) => void | typeof UsersController {
+function ApiTags(
+  arg0: string,
+): (target: typeof UsersController) => void | typeof UsersController {
   throw new Error('Function not implemented.');
 }
-
