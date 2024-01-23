@@ -21,7 +21,7 @@
             <form action="/notes/write" method="post">
                 <div>
                     <label for="title"></label>
-                    <input type="text" class="form-control" id="title" name="Title"  placeholder="Title" >
+                    <input type="text" class="form-control" id="title" name="Title" placeholder="Title">
                 </div>
                 <div>
                     <label for="body"></label>
@@ -40,7 +40,7 @@
 
             <form action="/notes/all" method="POST">
                 <input type="hidden" name="_method" value="DELETE">
-                <input type="submit" class="btn btn-danger" value="Delete All Notes">
+                <input type="submit" class="btn btn-dark" value="Delete All Notes">
             </form>
         </div>
         <div>
@@ -54,34 +54,29 @@
                 </th>
                 <tbody>
                     {{#each data}}
-                    <tr class="notes_list">
+                    <tr class="notes_list" width="50">
                         <form action="/notes/write" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="id" value="{{this.id}}">
                             <td scope="row">
-                                <input type="text" class="form-control" value="{{this.id}}" readonly>
+                                <input type="text" class="form-control" value="{{this.id}}" readonly><hr>
                             </td>
                             <td>
-                                <input type="text" class="form-control" value="{{this.Title}}" readonly>
-
+                                <input type="text" class="form-control" value="{{this.Title}}" readonly><hr>
                             </td>
                             <td>
-                                <input type="text" class="form-control" value="{{this.Body}}" readonly>
-
+                                <input type="text" class="form-control" value="{{this.Body}}" readonly><hr>
                             </td>
                             <td><button type="submit" class="btn btn-danger">Delete</button></td>
                         </form>
-
                         <td>
                             <form action="/notes/edit" method="GET">
                                 <input type="submit" class="btn btn-warning" value="Edit">
                             </form>
                         </td>
-
                     </tr>
                     {{/each}}
                 </tbody>
-
             </table>
         </div>
     </div>
