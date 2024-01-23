@@ -9,6 +9,7 @@ import * as cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  app.use(cookieParser());
   const config = new DocumentBuilder()
     .setTitle("NotePad Application Api's")
     .setDescription('The Notes API description')
@@ -20,7 +21,6 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(process.cwd(), 'views'));
   app.setViewEngine('hbs');
-  app.use(cookieParser());
 
   await app.listen(3000);
 }

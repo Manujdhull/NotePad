@@ -7,7 +7,7 @@ export class AppController {
 
   @Get('user/signup')
   @Render('signup')
-  signup():{message:string} {
+  signup(): { message: string } {
     return { message: 'Hello world!' };
   }
 
