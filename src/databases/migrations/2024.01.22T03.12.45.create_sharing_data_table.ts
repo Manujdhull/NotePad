@@ -13,6 +13,7 @@ export const up: Migration = async ({
       primaryKey: true,
       autoIncrement: true,
     },
+    
     sharedNoteId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -21,6 +22,7 @@ export const up: Migration = async ({
         key: 'id',
       },
     },
+
     sharedToUserId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -29,14 +31,17 @@ export const up: Migration = async ({
         key: 'id',
       },
     },
+
     createdAt: {
       type: DataTypes.DATE,
       default: DataTypes.NOW(),
     },
+
     updatedAt: {
       type: DataTypes.DATE,
       default: DataTypes.NOW(),
     },
+
   });
 };
 export const down: Migration = async ({

@@ -12,7 +12,7 @@ import { SharedNoteModel } from './shared-Notes.model';
 import { UserModel } from './user.model';
 
 @Table({ tableName: 'Notes' })
-export class NotesModel extends Model {
+export class NoteModel extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column

@@ -11,7 +11,8 @@ export class MapToUserNotesPipe implements PipeTransform {
   constructor(private notesService: NotesService) {}
 
   transform(id: number, metadata: ArgumentMetadata) {
-    const user = this.notesService.findOne(id);
+    const eid=Number(id);
+    const user = this.notesService.findOne(eid);
     if (!user) {
       throw new NotFoundException();
     }

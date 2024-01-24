@@ -25,7 +25,7 @@ export class ShareController {
     return this.shareService.findAllSharedNotes();
   }
 
-  @Post()
+  @Post('touser')
   @UsePipes(new ValidationPipe({ transform: true }))
   async sharingNotes(
     @Body() shareDto: ShareDto,

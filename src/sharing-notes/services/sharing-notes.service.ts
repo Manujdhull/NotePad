@@ -1,41 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { ShareDto } from '../dtos/sharing-notes.dto';
-import { NotesModel } from '../../databases/models/notes.model';
+import { ShareDto } from '../dtos/sharing-notes.dto'
+import { NoteModel } from '../../databases/models/note.model';
 import { SharedNoteModel } from '../../databases/models/shared-Notes.model';
 @Injectable()
 export class ShareService {
   constructor(
     @InjectModel(SharedNoteModel)
     private sharedModel: typeof SharedNoteModel,
-    @InjectModel(NotesModel)
-    private notesModel: typeof NotesModel,
-  ) {}
+    @InjectModel(NoteModel)
+    private notesModel: typeof NoteModel,
+  ) { }
 
-  public async sharingNote(
-    data: Pick<SharedNoteModel, 'sharedNoteId' | 'sharedToUserId'>,
-    user_id: number,
+  public async sharingNote(data: Pick<SharedNoteModel, 'sharedNoteId' | 'sharedToUserId'>,user_id: number,
   ): Promise<SharedNoteModel | string> {
     const shared_by_user_id = await this.sharedModel.findOne({
       where: {
-        shared_note_id: data.sharedNoteId,
+        sharedNoteId: data.sharedNoteId,
       },
     });
     if (Number(shared_by_user_id) === user_id) {
       return this.sharedModel.build().set(data).save();
     } else {
-      return "You don't have access to this note";
+      return "Accessed Denied!!";
     }
   }
+
   public async findAllSharedNotes(): Promise<SharedNoteModel[]> {
-    return this.sharedModel.scope('withnoteuser').findAll();
+    return this.sharedModel.scope('UserNotesScope').findAll();
   }
 
-  public async ShowSharedNotes(user_id: number) {
-    return this.sharedModel.scope('withnoteuser').findAll({
-      attributes: ['note.title', 'note.body'],
+  public async ShowSharedNotes(id: number) {
+    return this.sharedModel.scope('UserNotesScope').findAll({
+      attributes: ['note.Title', 'note.Body'],
       where: {
-        shared_to_user_id: user_id,
+        sharedToUserId: id,
       },
     });
   }

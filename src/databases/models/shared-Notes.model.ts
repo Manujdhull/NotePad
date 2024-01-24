@@ -7,17 +7,17 @@ import {
   Scopes,
   Table,
 } from 'sequelize-typescript';
-import { NotesModel } from './notes.model';
+import { NoteModel } from './note.model';
 import { UserModel } from './user.model';
 
 @Scopes(() => ({
-  withnoteuser: {
-    include: NotesModel,
+  UserNotesScope: {
+    include: NoteModel,
   },
 }))
 @Table({ tableName: 'SharedNotes' })
 export class SharedNoteModel extends Model {
-  @ForeignKey(() => NotesModel)
+  @ForeignKey(() => NoteModel)
   @Column
   public sharedNoteId: number;
 
@@ -27,11 +27,12 @@ export class SharedNoteModel extends Model {
 
   @PrimaryKey
   @Column
-  id: number;
+  public id: number;
 
   @Column
-  createdAt: Date;
+  public createdAt: Date;
 
   @Column
-  updatedAt: Date;
+  public updatedAt: Date;
+
 }

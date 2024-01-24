@@ -8,7 +8,7 @@ import {
 } from 'sequelize-typescript';
 
 import { Exclude } from 'class-transformer';
-import { NotesModel } from './notes.model';
+import { NoteModel } from './note.model';
 
 @Table
 export class UserModel extends Model {

@@ -10,9 +10,9 @@ export class UsersService {
     private hashService: HashService,
   ) {}
 
-  public async createUser(data): Promise<UserModel> {
+  public createUser(data): Promise<UserModel> {
     console.log(data, 'data of create user');
-    const password = await this.hashService.hashGenerator(data.password);
+    const password = this.hashService.hashGenerator(data.password);
     return this.userModel
       .build()
       .setAttributes({ username: data.username, password: password })
@@ -20,8 +20,8 @@ export class UsersService {
   }
 
   // getting all users
-  public async findAll(): Promise<UserModel[]> {
-    return await this.userModel.findAll();
+  public findAll(): Promise<UserModel[]> {
+    return this.userModel.findAll();
   }
 
   /**
@@ -29,7 +29,7 @@ export class UsersService {
    * @param id
    * @returns Promise<UserModel>
    */
-  async findOne(id: number): Promise<UserModel> {
+  public findOne(id: number): Promise<UserModel> {
     return this.userModel.findByPk(id).then((data) => data || null);
   }
 
@@ -38,7 +38,7 @@ export class UsersService {
    * @param user
    * @returns
    */
-  async destroy(user: UserModel): Promise<void> {
+  public destroy(user: UserModel): Promise<void> {
     return user.destroy();
   }
 

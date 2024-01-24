@@ -12,20 +12,18 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 </head>
 
-<body>
+<body style="background-color:#9ac4a93a">
     <center>
-        <div class="col-8">
+        <div class="col-10">
             <center>
-                <h2 class="mt-5">Notes</h2>
+                <h2 class="mt-5">NotePad</h2>
             </center>
             <form action="/notes/write" method="post">
-                <div>
-                    <label for="title"></label>
-                    <input type="text" class="form-control" id="title" name="Title" placeholder="Title">
+                <div class="p-3">
+                    <input type="text" class="form-control" id="title" name="Title" placeholder="Title" required>
                 </div>
-                <div>
-                    <label for="body"></label>
-                    <input type="text" class="form-control" id="body" name="Body" placeholder="Body">
+                <div class="p-3">
+                    <input type="text" class="form-control" id="body" name="Body" placeholder="Body" required>
                 </div>
                 <br>
                 <center>
@@ -35,51 +33,42 @@
         </div>
     </center>
     <hr>
-    <div class="border p-5">
-        <div style="float: right;">
-
-            <form action="/notes/all" method="POST">
-                <input type="hidden" name="_method" value="DELETE">
-                <input type="submit" class="btn btn-dark" value="Delete All Notes">
-            </form>
-        </div>
-        <div>
-            <table class="table">
-                <th>
+    <center>
+        <div class="border p-5 col-10">
+            <div>
+                <table class="table" style="background-color:;">
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">TITLE</th>
-                        <th scope="col">BODY</th>
+                        <th style="background-color: #9AC4A93A;">ID</th>
+                        <th style="background-color: #9AC4A93A;">TITLE</th>
+                        <th style="background-color: #9AC4A93A;">BODY</th>
                     </tr>
-                </th>
-                <tbody>
                     {{#each data}}
-                    <tr class="notes_list" width="50">
-                        <form action="/notes/write" method="POST">
-                            <input type="hidden" name="_method" value="DELETE">
+                    <tr>
+                        <form action="/notes" method="POST">
+                            <input type="hidden" name="update" value="DELETE">
                             <input type="hidden" name="id" value="{{this.id}}">
-                            <td scope="row">
-                                <input type="text" class="form-control" value="{{this.id}}" readonly><hr>
+                            <td>
+                                <input class="form-control" value="{{this.id}}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" value="{{this.Title}}" readonly><hr>
+                                <input class="form-control" value="{{this.Title}}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" value="{{this.Body}}" readonly><hr>
+                                <input class="form-control" value="{{this.Body}}">
                             </td>
-                            <td><button type="submit" class="btn btn-danger">Delete</button></td>
+                            <td>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </td>
                         </form>
                         <td>
-                            <form action="/notes/edit" method="GET">
-                                <input type="submit" class="btn btn-warning" value="Edit">
-                            </form>
+                            <a href="/notes/{{this.id}}/edit" class="btn btn-secondary">Edit</a>
                         </td>
                     </tr>
                     {{/each}}
-                </tbody>
-            </table>
+                </table>
+            </div>
         </div>
-    </div>
+    </center>
 
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -90,5 +79,4 @@
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
 </body>
-
 </html>

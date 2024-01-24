@@ -20,7 +20,7 @@ import {
 import { HttpStatus } from '@nestjs/common';
 import { NotesService } from '../services/notes.service';
 import { NotesDto } from '../dtos/create.notes.Body.Title.dto';
-import { NotesModel } from '../../databases/models/notes.model';
+import { NoteModel } from '../../databases/models/note.model';
 import { AuthGuard } from 'src/authentication/guard/auth.guard';
 import { UserModel } from 'src/databases/models/user.model';
 import { AuthUser } from 'src/users/authUser.decorator';
@@ -29,7 +29,7 @@ import { MapToUserNotesPipe } from '../pipes/map-to-user/map-to-user.pipe';
 @UseGuards(AuthGuard)
 @Controller('notes')
 export class NotesController {
-  constructor(private notesService: NotesService) {}
+  constructor(private notesService: NotesService) { }
 
   /**
    *
@@ -51,7 +51,7 @@ export class NotesController {
    * find all the notes of user in db
    * @param notesModel 
    */
-  public async findAll(notesModel: NotesModel): Promise<void> {
+  public async findAll(notesModel: NoteModel): Promise<void> {
     console.log('hello');
   }
 
@@ -62,7 +62,7 @@ export class NotesController {
    */
   @UsePipes(new ValidationPipe({ transform: true }))
   @Get(':id')
-  findOne(@Param('id') id: number): Promise<NotesModel> {
+  findOne(@Param('id') id: number): Promise<NoteModel> {
     return this.notesService.findOne(id);
   }
 
@@ -82,7 +82,7 @@ export class NotesController {
     console.log('this is authuser id', authuser.id);
     console.log(notesDto);
     await this.notesService.create(authuser.id, notesDto);
-    
+
   }
 
   /**
@@ -102,11 +102,12 @@ export class NotesController {
    * @param id
    * @returns Promise<number>
    */
+
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @HttpCode(HttpStatus.OK)
-  @Delete(':id')
+  @Delete()
+  @Redirect('notes')
   public async deleteNote(
-    @Param('id', ParseIntPipe, MapToUserNotesPipe) notes: NotesModel,
+    @Body('id', ParseIntPipe, MapToUserNotesPipe) notes: NoteModel,
   ): Promise<void> {
     return await this.notesService.destroy(notes);
   }
@@ -118,11 +119,22 @@ export class NotesController {
    * @returns
    */
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @Put(':id')
+  @Put(':id/edit')
+  @Redirect('/notes')
   public async editNote(
-    @Param('id', ParseIntPipe, MapToUserNotesPipe) notes: NotesModel,
+    @Param('id', ParseIntPipe, MapToUserNotesPipe) noteModel: NoteModel,
     @Body() body: NotesDto,
   ): Promise<void> {
-    return await this.notesService.updateRecord(notes, body);
+    console.log("BODY JO USER SAE AARI",body.Body);
+     await this.notesService.update(noteModel, body);
+  }
+
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @Render('update')
+  @Get(':id/edit')
+  public async updateDisplay(@Param('id') id: number) {
+    const data = await this.notesService.findOne(id);
+    console.log(data.dataValues,"data");
+    return { data: data };
   }
 }

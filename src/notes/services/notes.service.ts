@@ -1,4 +1,4 @@
-import { NotesModel } from '../../databases/models/notes.model';
+import { NoteModel } from '../../databases/models/note.model';
 
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
@@ -6,9 +6,9 @@ import { InjectModel } from '@nestjs/sequelize';
 @Injectable()
 export class NotesService {
   constructor(
-    @InjectModel(NotesModel)
-    private readonly notesModel: typeof NotesModel,
-  ) {}
+    @InjectModel(NoteModel)
+    private readonly notesModel: typeof NoteModel,
+  ) { }
 
   /**
    * create notes of logged in user
@@ -16,10 +16,10 @@ export class NotesService {
    * @param data
    * @returns Promise<NotesModel>
    */
-  public async create(
+  public create(
     id: number,
-    data: Pick<NotesModel, 'Title' | 'Body'>,
-  ): Promise<NotesModel> {
+    data: Pick<NoteModel, 'Title' | 'Body'>,
+  ): Promise<NoteModel> {
     return this.notesModel.build().set(data).set({ userid: id }).save();
   }
 
@@ -28,8 +28,8 @@ export class NotesService {
    * @param id
    * @returns :Promise<NotesModel[]>
    */
-  public async getMyNotes(id: number): Promise<NotesModel[]> {
-    return await this.notesModel.findAll({
+  public getMyNotes(id: number): Promise<NoteModel[]> {
+    return this.notesModel.findAll({
       where: {
         userid: id,
       },
@@ -40,7 +40,7 @@ export class NotesService {
    * find list of notes
    * @returns Promise<NotesModel[]
    */
-  public async findAll(): Promise<NotesModel[]> {
+  public findAll(): Promise<NoteModel[]> {
     return this.notesModel.findAll();
   }
 
@@ -49,7 +49,7 @@ export class NotesService {
    * @param id
    * @returns Promise<NotesModel>
    */
-  async findOne(id: number): Promise<NotesModel> {
+  public findOne(id: number): Promise<NoteModel> {
     return this.notesModel.findByPk(id).then((data) => data || null);
   }
 
@@ -58,8 +58,8 @@ export class NotesService {
    * @param id
    * @returns Promise<number>
    */
-  public async deleteAll(id: number): Promise<number> {
-    return await this.notesModel.destroy({
+  public deleteAll(id: number): Promise<number> {
+    return this.notesModel.destroy({
       where: {
         userid: id,
       },
@@ -71,20 +71,12 @@ export class NotesService {
    * @param notes
    * @returns Promise<void>
    */
-  public async destroy(notes: NotesModel): Promise<void> {
+  public destroy(notes: NoteModel): Promise<void> {
     return notes.destroy();
   }
 
-  /**
-   * update logged In user notes details
-   * @param userDataToUpdate
-   * @param userNewData
-   */
-  public async updateRecord(
-    userDataToUpdate: Pick<NotesModel, 'Title' | 'Body'>,
-    userNewData: Pick<NotesModel, 'Title' | 'Body'>,
-  ): Promise<void> {
-    userDataToUpdate.Body = userNewData.Body;
-    userDataToUpdate.Title = userNewData.Title;
+  public update(note: NoteModel, newContent: Partial<NoteModel>) {
+    console.log(newContent);
+    note.set( newContent ).save()
   }
 }
