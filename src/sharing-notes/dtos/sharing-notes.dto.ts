@@ -4,9 +4,9 @@ import { IsNotEmpty, IsNumber } from 'class-validator';
 export class ShareDto {
   @IsNumber()
   @IsNotEmpty()
-  sharedNoteId: number;
+  senId: number;
 
   @IsNumber()
   @IsNotEmpty()
-  sharedToUserId: number;
+  sharedNoteId: number;
 }

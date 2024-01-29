@@ -12,11 +12,13 @@ export const up: Migration = async ({ context: sequelize }) => {
 
     userid: {
       type: DataTypes.INTEGER,
-      // allowNull: false,
+      allowNull: false,
       references: {
-        model: 'UserModels',
+        model: 'Users',
         key: 'id',
       },
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
     },
 
     Title: {

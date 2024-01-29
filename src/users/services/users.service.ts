@@ -10,9 +10,10 @@ export class UsersService {
     private hashService: HashService,
   ) {}
 
-  public createUser(data): Promise<UserModel> {
+  public async createUser(data): Promise<UserModel> {
     console.log(data, 'data of create user');
-    const password = this.hashService.hashGenerator(data.password);
+    const password = await this.hashService.hashGenerator(data.password);
+    console.log('my password', password);
     return this.userModel
       .build()
       .setAttributes({ username: data.username, password: password })
@@ -42,6 +43,11 @@ export class UsersService {
     return user.destroy();
   }
 
+  /**
+   * finding user with their username
+   * @param username 
+   * @returns : Promise<UserModel>
+   */
   public findByUsername(username: string): Promise<UserModel> {
     return this.userModel.findOne({
       where: {

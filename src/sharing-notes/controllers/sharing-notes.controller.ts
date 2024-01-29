@@ -6,36 +6,50 @@ import {
   Body,
   UsePipes,
   ValidationPipe,
+  Query,
+  Redirect,
 } from '@nestjs/common';
-// import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../../authentication/guard/auth.guard';
 import { ShareService } from '../services/sharing-notes.service';
 import { SharedNoteModel } from '../../databases/models/shared-Notes.model';
-import { ShareDto } from '../dtos/sharing-notes.dto';
 import { AuthUser } from '../../users/authUser.decorator';
 import { UserModel } from '../../databases/models/user.model';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Shared Notes')
 @Controller('share')
 @UseGuards(AuthGuard)
 export class ShareController {
   constructor(private shareService: ShareService) {}
-
-  @Get('all')
-  findAll() {
-    return this.shareService.findAllSharedNotes();
-  }
-
-  @Post('touser')
-  @UsePipes(new ValidationPipe({ transform: true }))
+  /**
+   * create notes of logged in user
+   * @param data 
+   * @param authUser 
+   * @param query 
+   * @return Promise<void>
+   */
+  @Post('notes')
+  @UsePipes(ValidationPipe)
+  @Redirect('/notes')
   async sharingNotes(
-    @Body() shareDto: ShareDto,
+    @Body() data,
     @AuthUser() authUser: UserModel,
-  ): Promise<SharedNoteModel | string> {
-    return this.shareService.sharingNote(shareDto, authUser.id);
+    @Query() query,
+  ): Promise<void> {
+    console.log('query', query);
+    console.log('data', data);
+    await this.shareService.sharingNote(data, authUser.id);
   }
 
+  /**
+   * showing notes of logged in user
+   * @param authUser 
+   * @returns  Promise<SharedNoteModel[]>
+   */
   @Get()
-  public async ShowSharedNotes(@AuthUser() authUser: UserModel) {
+  public async ShowSharedToMeNotes(
+    @AuthUser() authUser: UserModel,
+  ): Promise<SharedNoteModel[]> {
     return this.shareService.ShowSharedNotes(authUser.id);
   }
 }

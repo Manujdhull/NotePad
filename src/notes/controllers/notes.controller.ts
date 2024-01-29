@@ -15,7 +15,7 @@ import {
   UsePipes,
   ValidationPipe,
   Render,
-  Redirect
+  Redirect,
 } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common';
 import { NotesService } from '../services/notes.service';
@@ -25,11 +25,19 @@ import { AuthGuard } from 'src/authentication/guard/auth.guard';
 import { UserModel } from 'src/databases/models/user.model';
 import { AuthUser } from 'src/users/authUser.decorator';
 import { MapToUserNotesPipe } from '../pipes/map-to-user/map-to-user.pipe';
+import { UsersService } from 'src/users/services/users.service';
+import { ShareService } from 'src/sharing-notes/services/sharing-notes.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Notes')
 @UseGuards(AuthGuard)
 @Controller('notes')
 export class NotesController {
-  constructor(private notesService: NotesService) { }
+  constructor(
+    private notesService: NotesService,
+    private userService: UsersService,
+    private shareService: ShareService,
+  ) { }
 
   /**
    *
@@ -42,17 +50,9 @@ export class NotesController {
   public async onDisplay(@AuthUser() userModel: UserModel) {
     const data = await this.notesService.getMyNotes(userModel.id);
     // console.log(data,"data");
-    return { data: data };
-    // console.log("hello")
-  }
-  // Promise<{data:NotesModel[]}>
-
-  /**
-   * find all the notes of user in db
-   * @param notesModel 
-   */
-  public async findAll(notesModel: NoteModel): Promise<void> {
-    console.log('hello');
+    const shareData = await this.shareService.ShowSharedNotes(userModel.id);
+    console.log('sharedData is this', shareData[0]);
+    return { data: data, shareData: shareData };
   }
 
   /**
@@ -82,7 +82,6 @@ export class NotesController {
     console.log('this is authuser id', authuser.id);
     console.log(notesDto);
     await this.notesService.create(authuser.id, notesDto);
-
   }
 
   /**
@@ -125,16 +124,34 @@ export class NotesController {
     @Param('id', ParseIntPipe, MapToUserNotesPipe) noteModel: NoteModel,
     @Body() body: NotesDto,
   ): Promise<void> {
-    console.log("BODY JO USER SAE AARI",body.Body);
-     await this.notesService.update(noteModel, body);
+    console.log('BODY JO USER SAE AARI', body.Body);
+    await this.notesService.update(noteModel, body);
   }
 
+  /**
+   * function to edit Notes 
+   * @param id 
+   * @returns Promise<{data:NoteModel}>
+   */
   @UsePipes(new ValidationPipe({ transform: true }))
   @Render('update')
   @Get(':id/edit')
-  public async updateDisplay(@Param('id') id: number) {
+  public async updateDisplay(@Param('id') id: number):Promise<{data:NoteModel}> {
     const data = await this.notesService.findOne(id);
-    console.log(data.dataValues,"data");
+    console.log(data.dataValues, 'data');
     return { data: data };
+  }
+
+  /**
+   * function to getting userNames of users
+   * @param sharedNoteId 
+   * @returns Promise<object>
+   */
+  @Get(':id/share')
+  @Render('share')
+  public async openShare(@Param('id') sharedNoteId: number): Promise<object> {
+    const users: UserModel[] = await this.userService.findAll();
+    console.log(users);
+    return { users, sharedNoteId };
   }
 }

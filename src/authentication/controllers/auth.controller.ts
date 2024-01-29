@@ -16,7 +16,9 @@ import { HashService } from '../services/hash.service';
 import { UserDtoLogin } from '../../users/dtos/users.login.dto';
 import { AuthService } from '../services/auth.service';
 import { Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Authentication')
 @Controller()
 export class AuthController {
   constructor(
@@ -45,4 +47,10 @@ export class AuthController {
   @Render('login')
   @Get('login')
   public async Display() {}
+
+  @Post('logout')
+  @Redirect('/login')
+  public async signOut(@Res({ passthrough: true }) response: Response) {
+    response.cookie('Authorization', '');
+  }
 }

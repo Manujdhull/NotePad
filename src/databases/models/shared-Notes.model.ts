@@ -19,11 +19,11 @@ import { UserModel } from './user.model';
 export class SharedNoteModel extends Model {
   @ForeignKey(() => NoteModel)
   @Column
-  public sharedNoteId: number;
+  public senId: number;
 
   @ForeignKey(() => UserModel)
   @Column
-  public sharedToUserId: number;
+  public sharedNoteId: number;
 
   @PrimaryKey
   @Column
@@ -35,4 +35,17 @@ export class SharedNoteModel extends Model {
   @Column
   public updatedAt: Date;
 
+  @BelongsTo(() => UserModel, {
+    foreignKey: 'senId',
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  })
+  public sender: UserModel[];
+
+  @BelongsTo(() => NoteModel, {
+    foreignKey: 'sharedNoteId',
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+  })
+  public notes: NoteModel[];
 }

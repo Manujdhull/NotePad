@@ -12,6 +12,12 @@ export class CheckPasswordMatchValidator
   implements ValidatorConstraintInterface
 {
   constructor(private notesService: NotesService) {}
+  /**
+   * function for check password correct according to userName
+   * @param Title 
+   * @param args 
+   * @returns Promise<boolean>
+   */
   public async validate(
     Title: any,
     args: ValidationArguments,

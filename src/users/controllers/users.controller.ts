@@ -18,13 +18,19 @@ import { UserDtoSignUp } from '../dtos/users.signup.dto';
 import { MapToUserPipe } from '../pipes/map-to-user/map-to-user.pipe';
 import { UserModel } from 'src/databases/models/user.model';
 import { AuthGuard } from 'src/authentication/guard/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
-// @ApiTags('user')
+@ApiTags('user')
 @Controller('user')
 export class UsersController {
   constructor(private usersService: UsersService) {}
   // (transform:means structuring data as same of our dto)
   // whitelist true means ignoring extra data
+  /**
+   * creating new user
+   * @param body 
+   * @returns : Promise<UserModel>
+   */
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Post('signUp')
   @Render('login')
@@ -34,6 +40,10 @@ export class UsersController {
     return this.usersService.createUser(body);
   }
 
+  /**
+   * list all the users
+   * @returns : Promise<UserModel[]>
+   */
   @UseGuards(AuthGuard)
   // fetching all the users list in table
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
@@ -43,6 +53,11 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
+  /**
+   * find one user with id
+   * @param user 
+   * @returns : Promise<UserModel>
+   */
   @UseGuards(AuthGuard)
   // fetching data with specific id
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
@@ -53,6 +68,11 @@ export class UsersController {
     return user;
   }
 
+  /**
+   * delete user with their id
+   * @param user 
+   * @returns : Promise<Void>
+   */
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
@@ -62,9 +82,4 @@ export class UsersController {
   ): Promise<void> {
     return this.usersService.destroy(user);
   }
-}
-function ApiTags(
-  arg0: string,
-): (target: typeof UsersController) => void | typeof UsersController {
-  throw new Error('Function not implemented.');
 }

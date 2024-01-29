@@ -10,7 +10,7 @@ import {
 import { Exclude } from 'class-transformer';
 import { NoteModel } from './note.model';
 
-@Table
+@Table({ tableName: 'Users' })
 export class UserModel extends Model {
   @PrimaryKey
   @AutoIncrement

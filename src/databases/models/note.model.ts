@@ -6,10 +6,9 @@ import {
   HasMany,
   Model,
   PrimaryKey,
+  Scopes,
   Table,
 } from 'sequelize-typescript';
-import { SharedNoteModel } from './shared-Notes.model';
-import { UserModel } from './user.model';
 
 @Table({ tableName: 'Notes' })
 export class NoteModel extends Model {

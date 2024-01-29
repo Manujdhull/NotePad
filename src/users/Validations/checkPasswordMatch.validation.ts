@@ -12,6 +12,12 @@ export class CheckPasswordMatchValidator
   implements ValidatorConstraintInterface
 {
   constructor(private usersService: UsersService) {}
+  /**
+   * check password amtches or not
+   * @param password 
+   * @param args 
+   * @returns Promise<Boolean>
+   */
   public async validate(
     password: any,
     args: ValidationArguments,

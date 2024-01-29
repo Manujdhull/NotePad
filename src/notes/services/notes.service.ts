@@ -8,7 +8,7 @@ export class NotesService {
   constructor(
     @InjectModel(NoteModel)
     private readonly notesModel: typeof NoteModel,
-  ) { }
+  ) {}
 
   /**
    * create notes of logged in user
@@ -75,8 +75,13 @@ export class NotesService {
     return notes.destroy();
   }
 
+  /**
+   * function update notes
+   * @param note 
+   * @param newContent 
+   */
   public update(note: NoteModel, newContent: Partial<NoteModel>) {
-    console.log(newContent);
-    note.set( newContent ).save()
+    // console.log(newContent);
+    note.set(newContent).save();
   }
 }

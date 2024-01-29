@@ -10,6 +10,12 @@ import { UsersService } from '../services/users.service';
 @ValidatorConstraint({ async: true })
 export class CheckUserExistsValidator implements ValidatorConstraintInterface {
   constructor(private usersService: UsersService) {}
+  /**
+   * check user exists or not
+   * @param username 
+   * @param args 
+   * @returns Promise<boolean>
+   */
   validate(username: any, args: ValidationArguments): Promise<boolean> {
     return this.usersService.findByUsername(username).then((user) => {
       if (user) return false;
