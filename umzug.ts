@@ -5,12 +5,9 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 const sequelize = new Sequelize(
-	// "NotePad",
-	// "mackmanuj",
-	// "Rubi@123",
-	process.env.database,
-	process.env.username,
-	process.env.password,
+	process.env.database_name,
+	process.env.database_username,
+	process.env.database_password,
 	{
 	host:"localhost",
 	dialect: 'mysql'
@@ -24,7 +21,6 @@ export const migrator = new umzug.Umzug({
 	storage: new umzug.SequelizeStorage({
 		sequelize,
 	}),
-	logger: console,
 });
 
 export type Migration =  (typeof migrator._types.migration);
