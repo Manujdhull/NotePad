@@ -1,6 +1,7 @@
 import {
   AutoIncrement,
   Column,
+  DeletedAt,
   HasMany,
   Model,
   PrimaryKey,
@@ -8,7 +9,6 @@ import {
 } from 'sequelize-typescript';
 
 import { Exclude } from 'class-transformer';
-import { NoteModel } from './note.model';
 
 @Table({ tableName: 'Users' })
 export class UserModel extends Model {
@@ -19,6 +19,9 @@ export class UserModel extends Model {
 
   @Column({ unique: true })
   public username: string;
+
+  @Column
+  public Email:string
 
   @Column
   @Exclude()

@@ -2,15 +2,18 @@ import {
   AutoIncrement,
   BelongsTo,
   Column,
+  CreatedAt,
+  DeletedAt,
   ForeignKey,
   HasMany,
   Model,
   PrimaryKey,
   Scopes,
   Table,
+  UpdatedAt,
 } from 'sequelize-typescript';
 
-@Table({ tableName: 'Notes' })
+@Table({ tableName: 'Notes', paranoid: true })
 export class NoteModel extends Model {
   @PrimaryKey
   @AutoIncrement
@@ -18,17 +21,20 @@ export class NoteModel extends Model {
   public id: number;
 
   @Column({ allowNull: false })
-  Title: string;
+  public Title: string;
 
   @Column({ allowNull: false })
-  Body: string;
+  public Body: string;
+
+  @DeletedAt
+  public deletedAt:Boolean
 
   @Column
-  userid: number;
+  public userid: number;
 
-  @Column
+  @CreatedAt
   public createdAt: Date;
 
-  @Column
+  @UpdatedAt
   public updatedAt: Date;
 }
