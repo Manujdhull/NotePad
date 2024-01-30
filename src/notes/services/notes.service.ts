@@ -31,8 +31,9 @@ export class NotesService {
   public getMyNotes(id: number): Promise<NoteModel[]> {
     return this.notesModel.findAll({
       where: {
-        userid: id,
+        userid: id
       },
+      // raw:true
     });
   }
 
@@ -74,6 +75,17 @@ export class NotesService {
   public destroy(notes: NoteModel): Promise<void> {
     return notes.destroy();
   }
+
+  // public settingFlagFordestroy(notes: NoteModel,notesId){
+  //   this.notesModel
+  //     .update({
+  //       Status: true
+  //     }, {
+  //       where: {
+  //         id: notesId
+  //       }
+  //     })
+  // }
 
   /**
    * function update notes

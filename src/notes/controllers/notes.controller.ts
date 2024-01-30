@@ -47,12 +47,19 @@ export class NotesController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @Render('notes')
   @Get()
-  public async onDisplay(@AuthUser() userModel: UserModel) {
-    const data = await this.notesService.getMyNotes(userModel.id);
-    // console.log(data,"data");
+  public async DataOnDisplayNotes(@AuthUser() userModel: UserModel) {
+    const notesData = await this.notesService.getMyNotes(userModel.id);
+    console.log(notesData, "data", "is of user", userModel.id);
+
+    const userData = await this.userService.findOne(userModel.id);
+    // const userData = this.userService.findOne(notesData[0].userid);
+    console.log("user ka data", (await userData).Email);
+
+    const checkingEmailPresent = (await userData).Email;
     const shareData = await this.shareService.ShowSharedNotes(userModel.id);
+
     console.log('sharedData is this', shareData[0]);
-    return { data: data, shareData: shareData };
+    return { data: notesData, shareData: shareData, VerifyEmail: checkingEmailPresent };
   }
 
   /**
@@ -80,7 +87,7 @@ export class NotesController {
     @AuthUser() authuser: UserModel,
   ): Promise<void> {
     console.log('this is authuser id', authuser.id);
-    console.log(notesDto);
+    console.log("user sae aaya hua data", notesDto);
     await this.notesService.create(authuser.id, notesDto);
   }
 
@@ -111,6 +118,16 @@ export class NotesController {
     return await this.notesService.destroy(notes);
   }
 
+  // @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  // @Delete()
+  // @Redirect('notes')
+  // public async NoteStatusForDelete(
+  //   @Body('id', ParseIntPipe, MapToUserNotesPipe) notes: NoteModel,@AuthUser() authUser:NoteModel
+  // ): Promise<void> {
+  //   console.log("notes konsa hae",(notes.id))
+  //   return await this.notesService.settingFlagFordestroy(notes,notes.id);
+  // }
+
   /**
    * update notes of logged in user
    * @param id
@@ -136,7 +153,7 @@ export class NotesController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @Render('update')
   @Get(':id/edit')
-  public async updateDisplay(@Param('id') id: number):Promise<{data:NoteModel}> {
+  public async updateDisplay(@Param('id') id: number): Promise<{ data: NoteModel }> {
     const data = await this.notesService.findOne(id);
     console.log(data.dataValues, 'data');
     return { data: data };
