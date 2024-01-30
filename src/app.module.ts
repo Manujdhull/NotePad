@@ -12,6 +12,9 @@ import { ShareController } from './sharing-notes/controllers/sharing-notes.contr
 import { ShareModule } from './sharing-notes/sharing-notes.module';
 // import {ShareService} from './sharing-notes/services/sharing-notes.service'
 import { JwtService } from '@nestjs/jwt';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -31,8 +34,22 @@ import { JwtService } from '@nestjs/jwt';
       models: [UserModel, NoteModel, SharedNoteModel],
     }),
     ShareModule,
+    MailerModule.forRoot({
+      transport: 'smtps://user@domain.com:pass@smtp.domain.com',
+      defaults: {
+        from: '"nest-modules" <modules@nestjs.com>',
+      },
+      template: {
+        dir: __dirname + '/templates',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+    }),
+    MailModule,
   ],
   controllers: [AppController, ShareController],
   providers: [AppService, JwtService],
 })
-export class AppModule {}
+export class AppModule { }
