@@ -19,11 +19,13 @@
         }
     </style>
 </head>
-<form class="p-3" style="background-color: black;" action="/login">
+{{!-- <form class="p-3" style="background-color: black;" action="/login">
     <div>
         <button type="submit" class="btn btn-primary">Login</button>
     </div>
-</form>
+</form> --}}
+
+<a class="btn btn-primary m-3" href="/login">Login</a>
 
 <body style="background-color: black;">
     <main>
@@ -31,7 +33,6 @@
             <form class="card py-2 px-5" action="/user/signup" method="post">
                 <section class="vh-100">
                     <p class="text-center h1 fw-bold">Sign up</p>
-                    <form>
                         <div class="d-flex flex-row align-items-center mb-4">
                             <div class="form-outline flex-fill mb-0">
                                 <input type="text" name="username" id="form3Example1c" class="form-control" required/>
@@ -49,7 +50,6 @@
                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                             <button type="submit" class="btn btn-primary btn-lg">Register</button>
                         </div>
-                    </form>
                 </section>
             </form>
         </center>

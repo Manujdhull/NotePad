@@ -10,23 +10,35 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 </head>
-<form action="/logout" method="post" style="background-color: rgb(90, 85, 85);">
-    <div class="row">
-        <div class=" m-3 col-9">
-            <button type="submit" class="btn btn-danger btn">Logout</button>
-        </div>
-        <div class="col-2">
-            <!-- Example single danger button -->
-            <div class="dropdown-menu">
-                <h6 class="dropdown-header">Dropdown header</h6>
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
+<header>
+    {{#if VerifyEmail}}
+    <div class="alert alert-primary" role="alert">
+        Your Email is verified
+    </div>
+    {{else}}
+    <div class="alert alert-warning" role="alert">
+        Your Email is Not Verified
+        <a class="btn btn-primary" href="/user/verifyEmail">Verify Email</a>
+    </div>
+    {{/if}}
+</header>
+
+<body>
+    <form action="/logout" method="post" style="background-color: rgb(90, 85, 85);">
+        <div class="row">
+            <div class=" m-3 col-9">
+                <button type="submit" class="btn btn-danger btn">Logout</button>
+            </div>
+            <div class="col-2">
+                <!-- Example single danger button -->
+                <div class="dropdown-menu">
+                    <h6 class="dropdown-header">Dropdown header</h6>
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                </div>
             </div>
         </div>
-    </div>
-</form>
-
-<body >
+    </form>
     <center>
         <main style="background-color:#6b89763a">
             <div class="col-10">
@@ -49,6 +61,22 @@
         </main>
     </center>
     <hr>
+    <div class="row">
+        <div class="btn-group" role="group">
+            <a href="/notes?shared=createdByMe">
+                <button type="button" id="buttonId" class="btn btn-outline-primary m-2">
+                    Created By Me</button>
+            </a>
+            <a href="/notes?shared=sharedWithMe">
+                <button type="button" id="buttonId" class="btn btn-outline-primary m-2">
+                    Shared With Me</button>
+            </a>
+            <a href="/notes?shared=all">
+                <button type="button" id="buttonId" class="btn btn-outline-primary m-2">
+                    All Notes</button>
+            </a>
+        </div>
+    </div>
     <center>
         <div class="row p-3" style="justify-content: center;">
             <div class="border p-3 col-5" style="background-color: #4449463a;">
@@ -56,7 +84,7 @@
                     <center>
                         <h5>My Created Notes</h5>
                     </center>
-                    <table class="table" style="background-color:;">
+                    <table class="table">
                         <tr>
                             <th style="background-color: #9AC4A93A;">TITLE</th>
                             <th style="background-color: #9AC4A93A;">BODY</th>
@@ -118,6 +146,7 @@
                 </table>
             </div>
         </div>
+        <hr>
     </center>
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
