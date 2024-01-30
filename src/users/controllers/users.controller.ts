@@ -12,6 +12,7 @@ import {
   HttpStatus,
   Render,
   UseGuards,
+  Redirect,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { UserDtoSignUp } from '../dtos/users.signup.dto';
@@ -19,11 +20,13 @@ import { MapToUserPipe } from '../pipes/map-to-user/map-to-user.pipe';
 import { UserModel } from 'src/databases/models/user.model';
 import { AuthGuard } from 'src/authentication/guard/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { UserDtoEmail } from '../dtos/users.email.dto';
+import { AuthUser } from '../authUser.decorator';
 
 @ApiTags('user')
 @Controller('user')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService) { }
   // (transform:means structuring data as same of our dto)
   // whitelist true means ignoring extra data
   /**
@@ -38,6 +41,23 @@ export class UsersController {
     console.log('my body in hbs sign up', body);
     // return this.usersService.create(body.username, body.password);
     return this.usersService.createUser(body);
+  }
+
+  // @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  @UseGuards(AuthGuard)
+  @Get('verifyEmail')
+  @Render('verifyEmail')
+  public async showEmailDisplay() {
+    console.log('my Email in hbs verifying email');
+  }
+
+  // @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  @UseGuards(AuthGuard)
+  @Post('verifyEmail')
+  @Redirect('/notes')
+  public async verifyEmail(@AuthUser() authUser: UserModel,@Body() userDtoEmail:UserDtoEmail) {
+    console.log('my Email in hbs verifying email', userDtoEmail.Email);
+    this.usersService.createUserEmail(userDtoEmail.Email,authUser.id)
   }
 
   /**

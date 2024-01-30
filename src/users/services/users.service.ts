@@ -8,8 +8,13 @@ export class UsersService {
     @InjectModel(UserModel)
     private userModel: typeof UserModel,
     private hashService: HashService,
-  ) {}
+  ) { }
 
+  /**
+   * function 
+   * @param data 
+   * @returns Promise<UserModel>
+   */
   public async createUser(data): Promise<UserModel> {
     console.log(data, 'data of create user');
     const password = await this.hashService.hashGenerator(data.password);
@@ -18,6 +23,20 @@ export class UsersService {
       .build()
       .setAttributes({ username: data.username, password: password })
       .save();
+  }
+
+  public async createUserEmail(data, id) {
+    console.log(data, 'data of create user');
+    // const password = await this.hashService.hashGenerator(data.password);
+    console.log('my email', data);
+    this.userModel
+      .update({
+        Email: data
+      }, {
+        where: {
+          id: id
+        }
+      })
   }
 
   // getting all users
@@ -54,5 +73,9 @@ export class UsersService {
         username: username,
       },
     });
+  }
+
+  public AddingEmail(email, id) {
+
   }
 }
