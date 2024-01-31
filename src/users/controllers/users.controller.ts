@@ -26,12 +26,12 @@ import { AuthUser } from '../authUser.decorator';
 @ApiTags('user')
 @Controller('user')
 export class UsersController {
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService) {}
   // (transform:means structuring data as same of our dto)
   // whitelist true means ignoring extra data
   /**
    * creating new user
-   * @param body 
+   * @param body
    * @returns : Promise<UserModel>
    */
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
@@ -55,9 +55,12 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Post('verifyEmail')
   @Redirect('/notes')
-  public async verifyEmail(@AuthUser() authUser: UserModel,@Body() userDtoEmail:UserDtoEmail) {
+  public async verifyEmail(
+    @AuthUser() authUser: UserModel,
+    @Body() userDtoEmail: UserDtoEmail,
+  ) {
     console.log('my Email in hbs verifying email', userDtoEmail.Email);
-    this.usersService.createUserEmail(userDtoEmail.Email,authUser.id)
+    this.usersService.createUserEmail(userDtoEmail.Email, authUser.id);
   }
 
   /**
@@ -75,7 +78,7 @@ export class UsersController {
 
   /**
    * find one user with id
-   * @param user 
+   * @param user
    * @returns : Promise<UserModel>
    */
   @UseGuards(AuthGuard)
@@ -90,7 +93,7 @@ export class UsersController {
 
   /**
    * delete user with their id
-   * @param user 
+   * @param user
    * @returns : Promise<Void>
    */
   @UseGuards(AuthGuard)
