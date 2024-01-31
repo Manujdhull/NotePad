@@ -21,7 +21,7 @@ export class UserModel extends Model {
   public username: string;
 
   @Column
-  public Email:string
+  public Email: string;
 
   @Column
   @Exclude()

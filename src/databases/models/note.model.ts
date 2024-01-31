@@ -27,7 +27,7 @@ export class NoteModel extends Model {
   public Body: string;
 
   @DeletedAt
-  public deletedAt:Boolean
+  public deletedAt: boolean;
 
   @Column
   public userid: number;
