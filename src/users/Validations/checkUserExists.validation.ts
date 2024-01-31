@@ -12,8 +12,8 @@ export class CheckUserExistsValidator implements ValidatorConstraintInterface {
   constructor(private usersService: UsersService) {}
   /**
    * check user exists or not
-   * @param username 
-   * @param args 
+   * @param username
+   * @param args
    * @returns Promise<boolean>
    */
   validate(username: any, args: ValidationArguments): Promise<boolean> {

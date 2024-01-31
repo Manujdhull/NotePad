@@ -14,8 +14,8 @@ export class CheckPasswordMatchValidator
   constructor(private usersService: UsersService) {}
   /**
    * check password amtches or not
-   * @param password 
-   * @param args 
+   * @param password
+   * @param args
    * @returns Promise<Boolean>
    */
   public async validate(
