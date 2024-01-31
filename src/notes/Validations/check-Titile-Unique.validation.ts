@@ -14,8 +14,8 @@ export class CheckPasswordMatchValidator
   constructor(private notesService: NotesService) {}
   /**
    * function for check password correct according to userName
-   * @param Title 
-   * @param args 
+   * @param Title
+   * @param args
    * @returns Promise<boolean>
    */
   public async validate(
