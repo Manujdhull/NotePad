@@ -13,11 +13,11 @@ export class MapToUserNotesPipe implements PipeTransform {
 
   /**
    * function returning user exist or not
-   * @param id 
-   * @param metadata 
+   * @param id
+   * @param metadata
    * @returns Promise<NoteModel>
    */
-  transform(id: number, metadata: ArgumentMetadata):Promise<NoteModel> {
+  transform(id: number, metadata: ArgumentMetadata): Promise<NoteModel> {
     const eid = Number(id);
     const user = this.notesService.findOne(eid);
     if (!user) {
