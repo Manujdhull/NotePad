@@ -8,11 +8,11 @@ export class UsersService {
     @InjectModel(UserModel)
     private userModel: typeof UserModel,
     private hashService: HashService,
-  ) { }
+  ) {}
 
   /**
-   * function 
-   * @param data 
+   * function
+   * @param data
    * @returns Promise<UserModel>
    */
   public async createUser(data): Promise<UserModel> {
@@ -29,14 +29,16 @@ export class UsersService {
     console.log(data, 'data of create user');
     // const password = await this.hashService.hashGenerator(data.password);
     console.log('my email', data);
-    this.userModel
-      .update({
-        Email: data
-      }, {
+    this.userModel.update(
+      {
+        Email: data,
+      },
+      {
         where: {
-          id: id
-        }
-      })
+          id: id,
+        },
+      },
+    );
   }
 
   // getting all users
@@ -64,7 +66,7 @@ export class UsersService {
 
   /**
    * finding user with their username
-   * @param username 
+   * @param username
    * @returns : Promise<UserModel>
    */
   public findByUsername(username: string): Promise<UserModel> {
@@ -75,7 +77,5 @@ export class UsersService {
     });
   }
 
-  public AddingEmail(email, id) {
-
-  }
+  public AddingEmail(email, id) {}
 }
