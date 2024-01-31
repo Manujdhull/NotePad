@@ -11,6 +11,7 @@ import { UserModel } from 'src/databases/models/user.model';
 import { UsersModule } from 'src/users/users.module';
 import { UserRepoModule } from 'src/users/user-repo.module';
 import { ShareModule } from 'src/sharing-notes/sharing-notes.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ShareModule } from 'src/sharing-notes/sharing-notes.module';
     JwtModule,
     UserRepoModule,
     ShareModule,
+    MailModule,
   ],
   controllers: [NotesController],
   providers: [NotesService],
