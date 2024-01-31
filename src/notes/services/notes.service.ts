@@ -1,13 +1,20 @@
 import { NoteModel } from '../../databases/models/note.model';
-
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { SharedNoteModel } from 'src/databases/models/shared-Notes.model';
+import { UserModel } from 'src/databases/models/user.model';
+import { UsersService } from '../../users/services/users.service';
+import { ShareService } from 'src/sharing-notes/services/sharing-notes.service';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class NotesService {
   constructor(
     @InjectModel(NoteModel)
     private readonly notesModel: typeof NoteModel,
+    private readonly usersService: UsersService,
+    private readonly shareService: ShareService,
+    private readonly mailService: MailService,
   ) {}
 
   /**
@@ -31,9 +38,9 @@ export class NotesService {
   public getMyNotes(id: number): Promise<NoteModel[]> {
     return this.notesModel.findAll({
       where: {
-        userid: id
+        userid: id,
       },
-      // raw:true
+      raw: true,
     });
   }
 
@@ -55,19 +62,6 @@ export class NotesService {
   }
 
   /**
-   * delete all notes of loggedIn user
-   * @param id
-   * @returns Promise<number>
-   */
-  public deleteAll(id: number): Promise<number> {
-    return this.notesModel.destroy({
-      where: {
-        userid: id,
-      },
-    });
-  }
-
-  /**
    * delete specific note of loggedIn user
    * @param notes
    * @returns Promise<void>
@@ -76,24 +70,51 @@ export class NotesService {
     return notes.destroy();
   }
 
-  // public settingFlagFordestroy(notes: NoteModel,notesId){
-  //   this.notesModel
-  //     .update({
-  //       Status: true
-  //     }, {
-  //       where: {
-  //         id: notesId
-  //       }
-  //     })
-  // }
-
   /**
    * function update notes
-   * @param note 
-   * @param newContent 
+   * @param note
+   * @param newContent
    */
   public update(note: NoteModel, newContent: Partial<NoteModel>) {
     // console.log(newContent);
     note.set(newContent).save();
+  }
+
+  public async deleteNote(userid: number, id: number): Promise<number> {
+    const note: NoteModel = await this.notesModel.findOne({
+      where: {
+        id: id,
+        userid: userid,
+      },
+    });
+    const bodyOfNote: string = note.Body;
+    const titleOfNote: string = note.Body;
+    const UsernameOfnoteOwner: string = (
+      await this.usersService.findOne(userid)
+    ).username;
+    // console.log("usser name of note original user",UsernameOfnoteOwner) //return username
+    const sharedToUser: SharedNoteModel =
+      await this.shareService.getSharedToUserId(id);
+    // console.log("shared to user",sharedToUser )
+    console.log(
+      'shared to user email check',
+      await this.usersService.findOne(sharedToUser.senId),
+    );
+
+    const EmailOfuserNoteSharedWithWhom: string = (
+      await this.usersService.findOne(sharedToUser.senId)
+    ).Email;
+    await this.mailService.sendDeleteNoteMsg(
+      bodyOfNote,
+      titleOfNote,
+      EmailOfuserNoteSharedWithWhom,
+      UsernameOfnoteOwner,
+    );
+    return this.notesModel.destroy({
+      where: {
+        userid: userid,
+        id: id,
+      },
+    });
   }
 }

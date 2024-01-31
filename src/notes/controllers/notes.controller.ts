@@ -17,7 +17,6 @@ import {
   Render,
   Redirect,
 } from '@nestjs/common';
-import { HttpStatus } from '@nestjs/common';
 import { NotesService } from '../services/notes.service';
 import { NotesDto } from '../dtos/create.notes.Body.Title.dto';
 import { NoteModel } from '../../databases/models/note.model';
@@ -37,7 +36,7 @@ export class NotesController {
     private notesService: NotesService,
     private userService: UsersService,
     private shareService: ShareService,
-  ) { }
+  ) {}
 
   /**
    *
@@ -47,19 +46,32 @@ export class NotesController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @Render('notes')
   @Get()
-  public async DataOnDisplayNotes(@AuthUser() userModel: UserModel) {
+  public async DataOnDisplayNotes(
+    @Query('shared') shared: string,
+    @AuthUser() userModel: UserModel,
+  ) {
+    // console.log(await this.notesService.getMyNotes(userModel.id))
     const notesData = await this.notesService.getMyNotes(userModel.id);
-    console.log(notesData, "data", "is of user", userModel.id);
+    // console.log(notesData, "data", "is of user", userModel.id);
 
     const userData = await this.userService.findOne(userModel.id);
     // const userData = this.userService.findOne(notesData[0].userid);
-    console.log("user ka data", (await userData).Email);
+    // console.log("user ka data", (await userData).Email);
 
     const checkingEmailPresent = (await userData).Email;
     const shareData = await this.shareService.ShowSharedNotes(userModel.id);
 
-    console.log('sharedData is this', shareData[0]);
-    return { data: notesData, shareData: shareData, VerifyEmail: checkingEmailPresent };
+    if (shared === 'createdByMe') {
+      return { data: notesData, VerifyEmail: checkingEmailPresent };
+    } else if (shared === 'sharedWithMe') {
+      return { shareData: shareData, VerifyEmail: checkingEmailPresent };
+    }
+    // console.log('sharedData is this', shareData[0]);
+    return {
+      data: notesData,
+      shareData: shareData,
+      VerifyEmail: checkingEmailPresent,
+    };
   }
 
   /**
@@ -86,21 +98,9 @@ export class NotesController {
     @Body() notesDto: NotesDto,
     @AuthUser() authuser: UserModel,
   ): Promise<void> {
-    console.log('this is authuser id', authuser.id);
-    console.log("user sae aaya hua data", notesDto);
+    // console.log('this is authuser id', authuser.id);
+    // console.log("user sae aaya hua data", notesDto);
     await this.notesService.create(authuser.id, notesDto);
-  }
-
-  /**
-   * delete all the records of logged in user
-   * @param id
-   * @returns Promise<void>
-   */
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @HttpCode(HttpStatus.OK)
-  @Delete(':id')
-  public async deleteAllNotes(@Param('id') id: number): Promise<void> {
-    await this.notesService.deleteAll(id);
   }
 
   /**
@@ -108,25 +108,15 @@ export class NotesController {
    * @param id
    * @returns Promise<number>
    */
-
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Delete()
   @Redirect('notes')
   public async deleteNote(
     @Body('id', ParseIntPipe, MapToUserNotesPipe) notes: NoteModel,
-  ): Promise<void> {
-    return await this.notesService.destroy(notes);
+    @AuthUser() authUser: UserModel,
+  ): Promise<number> {
+    return await this.notesService.deleteNote(notes.userid, notes.id);
   }
-
-  // @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  // @Delete()
-  // @Redirect('notes')
-  // public async NoteStatusForDelete(
-  //   @Body('id', ParseIntPipe, MapToUserNotesPipe) notes: NoteModel,@AuthUser() authUser:NoteModel
-  // ): Promise<void> {
-  //   console.log("notes konsa hae",(notes.id))
-  //   return await this.notesService.settingFlagFordestroy(notes,notes.id);
-  // }
 
   /**
    * update notes of logged in user
@@ -135,40 +125,45 @@ export class NotesController {
    * @returns
    */
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @Put(':id/edit')
+  @Put(':id')
   @Redirect('/notes')
   public async editNote(
     @Param('id', ParseIntPipe, MapToUserNotesPipe) noteModel: NoteModel,
     @Body() body: NotesDto,
   ): Promise<void> {
-    console.log('BODY JO USER SAE AARI', body.Body);
+    // console.log('BODY JO USER SAE AARI', body.Body);
     await this.notesService.update(noteModel, body);
   }
 
   /**
-   * function to edit Notes 
-   * @param id 
+   * function to edit Notes
+   * @param id
    * @returns Promise<{data:NoteModel}>
    */
   @UsePipes(new ValidationPipe({ transform: true }))
   @Render('update')
   @Get(':id/edit')
-  public async updateDisplay(@Param('id') id: number): Promise<{ data: NoteModel }> {
+  public async updateDisplay(
+    @Param('id') id: number,
+  ): Promise<{ data: NoteModel }> {
     const data = await this.notesService.findOne(id);
-    console.log(data.dataValues, 'data');
+    // console.log(data.dataValues, 'data');
     return { data: data };
   }
 
   /**
    * function to getting userNames of users
-   * @param sharedNoteId 
+   * @param sharedNoteId
    * @returns Promise<object>
    */
   @Get(':id/share')
   @Render('share')
   public async openShare(@Param('id') sharedNoteId: number): Promise<object> {
-    const users: UserModel[] = await this.userService.findAll();
-    console.log(users);
+    const data: UserModel[] = await this.userService.findAll();
+    const sameUserWhoShare = await this.notesService.findOne(sharedNoteId);
+    console.log('ye hae users ki id', sameUserWhoShare.userid);
+    // console.log("smjha janna",data[0],"user ka data hae ye jo share mae ja rha h")
+    const users = data.filter((data) => data.id !== sameUserWhoShare.userid);
     return { users, sharedNoteId };
   }
 }
