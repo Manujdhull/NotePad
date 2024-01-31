@@ -1,13 +1,3 @@
-// import { Module } from '@nestjs/common';
-// import { MailService } from './mail.service';
-
-// @Module({
-//   providers: [MailService]
-// })
-// export class MailModule {}
-
-
-// email.module.tsimport { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
@@ -21,6 +11,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
       useFactory: async (config: ConfigService) => ({
         transport: {
           host: config.get('MAIL_HOST'),
+          // host:"smtp.gmail.com",
+          port: config.get('MAIL_PORT'),
           secure: false,
           auth: {
             user: config.get('MAIL_USER'),
@@ -31,7 +23,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
           from: `"No Reply" <${config.get('MAIL_FROM')}>`,
         },
         template: {
-          dir: join(__dirname, '..','..','mail','templates'),
+          dir: join('dist', 'mail', 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: false,
