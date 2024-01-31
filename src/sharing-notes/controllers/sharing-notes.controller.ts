@@ -23,9 +23,9 @@ export class ShareController {
   constructor(private shareService: ShareService) {}
   /**
    * create notes of logged in user
-   * @param data 
-   * @param authUser 
-   * @param query 
+   * @param data
+   * @param authUser
+   * @param query
    * @return Promise<void>
    */
   @Post('notes')
@@ -43,7 +43,7 @@ export class ShareController {
 
   /**
    * showing notes of logged in user
-   * @param authUser 
+   * @param authUser
    * @returns  Promise<SharedNoteModel[]>
    */
   @Get()
