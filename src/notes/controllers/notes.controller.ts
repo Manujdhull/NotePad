@@ -27,6 +27,7 @@ import { MapToUserNotesPipe } from '../pipes/map-to-user/map-to-user.pipe';
 import { UsersService } from 'src/users/services/users.service';
 import { ShareService } from 'src/sharing-notes/services/sharing-notes.service';
 import { ApiTags } from '@nestjs/swagger';
+import * as fs from 'fs'
 
 @ApiTags('Notes')
 @UseGuards(AuthGuard)
@@ -60,6 +61,10 @@ export class NotesController {
 
     const checkingEmailPresent = (await userData).Email;
     const shareData = await this.shareService.ShowSharedNotes(userModel.id);
+    const profilePicture=userData.profilePicture;
+    console.log("my profile picture",profilePicture)
+    const[path,name]=profilePicture.split("/");
+    // fs.readFile(name)
 
     if (shared === 'createdByMe') {
       return { data: notesData, VerifyEmail: checkingEmailPresent };
@@ -71,6 +76,7 @@ export class NotesController {
       data: notesData,
       shareData: shareData,
       VerifyEmail: checkingEmailPresent,
+      profilePicture:profilePicture
     };
   }
 
