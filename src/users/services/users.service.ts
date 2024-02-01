@@ -25,10 +25,37 @@ export class UsersService {
       .save();
   }
 
-  public async createUserEmail(data, id) {
+  public async createUserEmailProfile(data, id,profilePicture) {
     console.log(data, 'data of create user');
     // const password = await this.hashService.hashGenerator(data.password);
     console.log('my email', data);
+    this.userModel.update(
+      {
+        Email: data,
+        profilePicture:profilePicture
+      },
+      {
+        where: {
+          id: id,
+        },
+      },
+    );
+  }
+
+  public async createUserProfile( id,profilePicture) {
+    this.userModel.update(
+      {
+        profilePicture:profilePicture
+      },
+      {
+        where: {
+          id: id,
+        },
+      },
+    );
+  }
+
+  public async createUserEmail( data,id) {
     this.userModel.update(
       {
         Email: data,
@@ -40,6 +67,7 @@ export class UsersService {
       },
     );
   }
+
 
   // getting all users
   public findAll(): Promise<UserModel[]> {
@@ -77,5 +105,7 @@ export class UsersService {
     });
   }
 
-  public AddingEmail(email, id) {}
+  public AddingEmail(email, id) {
+
+  }
 }
