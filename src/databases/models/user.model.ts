@@ -23,6 +23,9 @@ export class UserModel extends Model {
   @Column
   public Email: string;
 
+  @Column 
+  public profilePicture:string
+
   @Column
   @Exclude()
   public password: string;
