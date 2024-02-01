@@ -11,16 +11,14 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 </head>
 <header>
-    {{#if VerifyEmail}}
-    <div class="alert alert-primary" role="alert">
-        Your Email is verified
+    <div class="row  alert alert-primary">
+        <div class=" col-7" role="alert">
+            <a class="btn btn-primary" href="/user/profile">Profile</a>
+        </div>
+        <div class="col">
+            <img class=" col someClass" src={{profilePicture}} alt="Your Profile Picture">
+        </div>
     </div>
-    {{else}}
-    <div class="alert alert-warning" role="alert">
-        Your Email is Not Verified
-        <a class="btn btn-primary" href="/user/verifyEmail">Verify Email</a>
-    </div>
-    {{/if}}
 </header>
 
 <body>
@@ -29,14 +27,9 @@
             <div class=" m-3 col-9">
                 <button type="submit" class="btn btn-danger btn">Logout</button>
             </div>
-            <div class="col-2">
-                <!-- Example single danger button -->
-                <div class="dropdown-menu">
-                    <h6 class="dropdown-header">Dropdown header</h6>
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                </div>
-            </div>
+            {{!-- <div>
+                <img class=" col someClass" src={{profilePicture}} alt="Your Profile Picture">
+            </div> --}}
         </div>
     </form>
     <center>
