@@ -1,4 +1,4 @@
-import sequelize, { DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import type { Migration } from 'umzug';
 
 export const up: Migration = async ({ context: sequelize }) => {

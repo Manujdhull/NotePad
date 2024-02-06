@@ -1,14 +1,10 @@
 import {
   AutoIncrement,
-  BelongsTo,
   Column,
   CreatedAt,
   DeletedAt,
-  ForeignKey,
-  HasMany,
   Model,
   PrimaryKey,
-  Scopes,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';

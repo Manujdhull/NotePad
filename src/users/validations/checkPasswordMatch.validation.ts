@@ -3,28 +3,27 @@ import {
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-  ValidationArguments,
 } from 'class-validator';
-import { UsersService } from '../services/users.service';
 
 @ValidatorConstraint({ async: true })
 export class CheckPasswordMatchValidator
   implements ValidatorConstraintInterface
 {
-  constructor(private usersService: UsersService) {}
+  constructor() {}
   /**
    * check password amtches or not
    * @param password
    * @param args
    * @returns Promise<Boolean>
    */
-  public async validate(
-    password: any,
-    args: ValidationArguments,
-  ): Promise<boolean> {
+  public validate(): boolean {
     return true;
   }
-  public defaultMessage(args: ValidationArguments): string {
+  /**
+   * function showing default message
+   * @returns
+   */
+  public defaultMessage(): string {
     // here you can provide default error message if validation failed
     return 'Password Not Matched';
   }

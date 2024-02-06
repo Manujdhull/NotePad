@@ -1,8 +1,6 @@
 import {
   AutoIncrement,
   Column,
-  DeletedAt,
-  HasMany,
   Model,
   PrimaryKey,
   Table,
@@ -23,8 +21,8 @@ export class UserModel extends Model {
   @Column
   public Email: string;
 
-  @Column 
-  public profilePicture:string
+  @Column
+  public profilePicture: string;
 
   @Column
   @Exclude()

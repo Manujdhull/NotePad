@@ -9,6 +9,7 @@ export const up: Migration = async ({ context: sequelize }) => {
       autoIncrement: true,
       allowNull: false,
     },
+
     senId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -19,6 +20,7 @@ export const up: Migration = async ({ context: sequelize }) => {
       onDelete: 'cascade',
       onUpdate: 'cascade',
     },
+
     sharedNoteId: {
       type: DataTypes.INTEGER,
       references: {
@@ -28,11 +30,13 @@ export const up: Migration = async ({ context: sequelize }) => {
       onDelete: 'cascade',
       onUpdate: 'cascade',
     },
+
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP()'),
     },
+
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,

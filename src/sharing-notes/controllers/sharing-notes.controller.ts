@@ -25,20 +25,18 @@ export class ShareController {
    * create notes of logged in user
    * @param data
    * @param authUser
-   * @param query
+   * @param _query
    * @return Promise<void>
    */
   @Post('notes')
   @UsePipes(ValidationPipe)
   @Redirect('/notes')
   async sharingNotes(
-    @Body() data,
+    @Body() data:any,
     @AuthUser() authUser: UserModel,
-    @Query() query,
+    @Query() _query:any,
   ): Promise<void> {
-    console.log('query', query);
-    console.log('data', data);
-    await this.shareService.sharingNote(data, authUser.id);
+    await this.shareService.sharingNote(data);
   }
 
   /**

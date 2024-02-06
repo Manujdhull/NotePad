@@ -7,32 +7,34 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from '../constants/auth.constants';
 import { Request } from 'express';
+import { UsersService } from 'src/users/services/users.service';
+import { UserModel } from 'src/databases/models/user.model';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private userService: UsersService,
+  ) {}
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request: any = context.switchToHttp().getRequest();
+    const request: any = context.switchToHttp().getRequest<Request>();
     const token: string = request.cookies.authorization;
-    console.log('token', token);
+    // if token is not present in response then throw Exception
     if (!token) {
       throw new UnauthorizedException();
     }
+    // if present then check
     try {
       const payload: any = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
       });
-      console.log(payload);
-      request['user'] = payload;
+      const user: UserModel = await this.userService.findByPK(
+        payload.id as number,
+      );
+      request.user = user;
     } catch {
-      // throw new UnauthorizedException();
     }
     return true;
   }
-
-  // private extractTokenFromHeader(request: Request): string | undefined {
-  //   const [type, token] = request.headers.authorization?.split(' ') ?? [];
-  //   return type === 'Bearer' ? token : undefined;
-  // }
 }

@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import { CheckUserExists } from '../Validations/checkUserExists.validation';
+import { CheckUserExists } from '../validations/checkUserExists.validation';
 export class UserDtoSignUp {
   @IsNotEmpty()
   @IsString()

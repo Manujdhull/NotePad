@@ -6,6 +6,7 @@ import { ShareService } from './services/sharing-notes.service';
 import { NoteModel } from '../databases/models/note.model';
 import { AuthModule } from 'src/authentication/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { UserRepoModule } from 'src/users/user-repo.module';
 
 @Module({
   imports: [
@@ -13,9 +14,10 @@ import { JwtModule } from '@nestjs/jwt';
     SequelizeModule.forFeature([NoteModel]),
     AuthModule,
     JwtModule,
+    UserRepoModule,
   ],
   controllers: [ShareController],
   providers: [ShareService],
   exports: [SequelizeModule, ShareService],
 })
-export class ShareModule {}
+export class SharingNotesModule {}

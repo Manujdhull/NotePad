@@ -2,7 +2,6 @@ import { NoteModel } from '../../databases/models/note.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { SharedNoteModel } from 'src/databases/models/shared-Notes.model';
-import { UserModel } from 'src/databases/models/user.model';
 import { UsersService } from '../../users/services/users.service';
 import { ShareService } from 'src/sharing-notes/services/sharing-notes.service';
 import { MailService } from 'src/mail/mail.service';
@@ -15,7 +14,7 @@ export class NotesService {
     private readonly usersService: UsersService,
     private readonly shareService: ShareService,
     private readonly mailService: MailService,
-  ) {}
+  ) { }
 
   /**
    * create notes of logged in user
@@ -57,8 +56,9 @@ export class NotesService {
    * @param id
    * @returns Promise<NotesModel>
    */
-  public findOne(id: number): Promise<NoteModel> {
-    return this.notesModel.findByPk(id).then((data) => data || null);
+  public async findOne(id: number): Promise<NoteModel> {
+    const data: NoteModel = await this.notesModel.findByPk(id);
+    return data || null;
   }
 
   /**
@@ -75,11 +75,16 @@ export class NotesService {
    * @param note
    * @param newContent
    */
-  public update(note: NoteModel, newContent: Partial<NoteModel>) {
-    // console.log(newContent);
+  public update(note: NoteModel, newContent: Partial<NoteModel>): void {
     note.set(newContent).save();
   }
 
+  /**
+   * delete the record of user
+   * @param userid
+   * @param id
+   * @returns Promise<number>
+   */
   public async deleteNote(userid: number, id: number): Promise<number> {
     const note: NoteModel = await this.notesModel.findOne({
       where: {
@@ -92,24 +97,24 @@ export class NotesService {
     const UsernameOfnoteOwner: string = (
       await this.usersService.findOne(userid)
     ).username;
-    // console.log("usser name of note original user",UsernameOfnoteOwner) //return username
     const sharedToUser: SharedNoteModel =
       await this.shareService.getSharedToUserId(id);
-    // console.log("shared to user",sharedToUser )
-    console.log(
-      'shared to user email check',
-      await this.usersService.findOne(sharedToUser.senId),
-    );
+    if (sharedToUser) {
+      console.log(
+        'shared to user email check',
+        await this.usersService.findOne(sharedToUser.senId),
+      );
 
-    const EmailOfuserNoteSharedWithWhom: string = (
-      await this.usersService.findOne(sharedToUser.senId)
-    ).Email;
-    await this.mailService.sendDeleteNoteMsg(
-      bodyOfNote,
-      titleOfNote,
-      EmailOfuserNoteSharedWithWhom,
-      UsernameOfnoteOwner,
-    );
+      const EmailOfuserNoteSharedWithWhom: string = (
+        await this.usersService.findOne(sharedToUser.senId)
+      ).Email;
+      await this.mailService.sendDeleteNoteMsg(
+        bodyOfNote,
+        titleOfNote,
+        EmailOfuserNoteSharedWithWhom,
+        UsernameOfnoteOwner,
+      );
+    }
     return this.notesModel.destroy({
       where: {
         userid: userid,

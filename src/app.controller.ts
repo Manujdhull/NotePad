@@ -10,10 +10,4 @@ export class AppController {
   signup(): { message: string } {
     return { message: 'Hello world!' };
   }
-
-  // @Get('user/login')
-  // @Render('login')
-  // login():{message:string} {
-  //   return { message: 'Hello world!' };
-  // }
 }

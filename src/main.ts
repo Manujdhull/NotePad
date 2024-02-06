@@ -18,6 +18,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
+  //for swagger setup
   SwaggerModule.setup('api', app, document);
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(process.cwd(), 'views'));
@@ -27,17 +28,15 @@ async function bootstrap() {
   //methodOverride (getter , option)
   // middleware for override the request.method
   app.use(
-    methodOverride(function (req, res) {
+    methodOverride(function (req): any {
       if (req.body && typeof req.body === 'object' && 'update' in req.body) {
-        // look in urlencoded POST bodies and delete it
-        const updating = req.body.update;
+        const updating: any = req.body.update;
         console.log(updating, req.body.update);
         delete req.body.update;
         return updating;
       }
     }),
   );
-
   await app.listen(3000);
 }
 bootstrap();

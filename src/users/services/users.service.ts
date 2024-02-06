@@ -11,28 +11,34 @@ export class UsersService {
   ) {}
 
   /**
-   * function
+   * function to signup
    * @param data
    * @returns Promise<UserModel>
    */
-  public async createUser(data): Promise<UserModel> {
-    console.log(data, 'data of create user');
+  public async createUser(data: any): Promise<UserModel> {
     const password = await this.hashService.hashGenerator(data.password);
-    console.log('my password', password);
     return this.userModel
       .build()
       .setAttributes({ username: data.username, password: password })
       .save();
   }
 
-  public async createUserEmailProfile(data, id,profilePicture) {
+  /**
+   * creating user email & profile picture
+   * @param data
+   * @param id
+   * @param profilePicture
+   */
+  public async createUserEmailProfile(
+    data: string,
+    id: number,
+    profilePicture: any,
+  ): Promise<void> {
     console.log(data, 'data of create user');
-    // const password = await this.hashService.hashGenerator(data.password);
-    console.log('my email', data);
     this.userModel.update(
       {
         Email: data,
-        profilePicture:profilePicture
+        profilePicture: profilePicture,
       },
       {
         where: {
@@ -42,10 +48,18 @@ export class UsersService {
     );
   }
 
-  public async createUserProfile( id,profilePicture) {
+  /**
+   * creating profile picture in database
+   * @param id
+   * @param profilePicturePath
+   */
+  public async createUserProfile(
+    id: number,
+    profilePicturePath: string,
+  ): Promise<void> {
     this.userModel.update(
       {
-        profilePicture:profilePicture
+        profilePicture: profilePicturePath,
       },
       {
         where: {
@@ -55,7 +69,12 @@ export class UsersService {
     );
   }
 
-  public async createUserEmail( data,id) {
+  /**
+   * adding email into database
+   * @param data
+   * @param id
+   */
+  public async createUserEmail(data: string, id: number): Promise<void> {
     this.userModel.update(
       {
         Email: data,
@@ -68,10 +87,21 @@ export class UsersService {
     );
   }
 
-
-  // getting all users
+  // /**
+  //  * find all the users
+  //  * @returns : Promise<UserModel[]>
+  //  */
   public findAll(): Promise<UserModel[]> {
     return this.userModel.findAll();
+  }
+
+  /**
+   * find user by pk
+   * @param id
+   * @returns
+   */
+  public async findByPK(id: number): Promise<UserModel> {
+    return await this.userModel.findByPk(id).then((data) => data || null);
   }
 
   /**
@@ -79,12 +109,13 @@ export class UsersService {
    * @param id
    * @returns Promise<UserModel>
    */
-  public findOne(id: number): Promise<UserModel> {
-    return this.userModel.findByPk(id).then((data) => data || null);
+  public async findOne(id: number): Promise<UserModel> {
+    const data = await this.userModel.findByPk(id);
+    return data || null;
   }
 
   /**
-   * Removes a user
+   * Removes a user logged in
    * @param user
    * @returns
    */
@@ -93,7 +124,7 @@ export class UsersService {
   }
 
   /**
-   * finding user with their username
+   * finding user with their username for using in validation
    * @param username
    * @returns : Promise<UserModel>
    */
@@ -105,7 +136,16 @@ export class UsersService {
     });
   }
 
-  public AddingEmail(email, id) {
-
+  /**
+   * adding image
+   * @param id
+   * @param image
+   * @returns Promise<[affectedCount:number]>
+   */
+  public async addImage(
+    user: UserModel,
+    profilePicture: string,
+  ): Promise<UserModel> {
+    return user.set({ profilePicture }).save();
   }
 }

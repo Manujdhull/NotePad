@@ -3,18 +3,32 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class HashService {
-  public async hashGenerator(pass: string) {
-    console.log('password', pass);
-    const password = pass;
+  /**
+   * function to convert simple string password into an hashed form
+   * @param pass
+   * @returns Promise<string>
+   */
+  public async hashGenerator(Password: string): Promise<string> {
+    const password: string = Password;
+    //generating random string
     const salt: string = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(password, salt);
-    console.log(hash);
+    //generate password in hash with some random string
+    const hash: string = await bcrypt.hash(password, salt);
     return hash;
   }
 
-  public async hashMatch(password, usersPassword) {
-    const isMatch = await bcrypt.compare(password, usersPassword);
-    // console.log("checking is match hae kya",isMatch)
+  /**
+   * function for checking hashed password
+   * @param password
+   * @param usersPassword
+   * @returns Promise<boolean>
+   */
+  public async hashMatch(
+    password: string | Buffer,
+    usersPassword: string,
+  ): Promise<boolean> {
+    //this can compare noraml password with hashed password with their own algos
+    const isMatch: boolean = await bcrypt.compare(password, usersPassword);
     return isMatch;
   }
 }

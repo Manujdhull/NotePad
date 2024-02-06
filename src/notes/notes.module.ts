@@ -4,13 +4,9 @@ import { NotesService } from './services/notes.service';
 import { NoteModel } from '../databases/models/note.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AuthModule } from 'src/authentication/auth.module';
-import { AuthGuard } from 'src/authentication/guard/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
-import { UsersService } from 'src/users/services/users.service';
-import { UserModel } from 'src/databases/models/user.model';
-import { UsersModule } from 'src/users/users.module';
 import { UserRepoModule } from 'src/users/user-repo.module';
-import { ShareModule } from 'src/sharing-notes/sharing-notes.module';
+import { SharingNotesModule } from 'src/sharing-notes/sharingNotes.module';
 import { MailModule } from 'src/mail/mail.module';
 
 @Module({
@@ -19,7 +15,7 @@ import { MailModule } from 'src/mail/mail.module';
     AuthModule,
     JwtModule,
     UserRepoModule,
-    ShareModule,
+    SharingNotesModule,
     MailModule,
   ],
   controllers: [NotesController],

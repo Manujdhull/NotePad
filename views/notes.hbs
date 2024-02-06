@@ -11,14 +11,19 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 </head>
 <header>
+    {{#if profilePicture}}
+    <div class="d-flex flex-row align-items-center mb-4 row">
+        <div class="form-outline flex-fill mb-0 col rounded">
+            <img class="shadow" src="profile/picture" alt="my-photo" style="border-radius: 100px;">
+        </div>
+    </div>
+    {{else}}
     <div class="row  alert alert-primary">
         <div class=" col-7" role="alert">
             <a class="btn btn-primary" href="/user/profile">Profile</a>
         </div>
-        <div class="col">
-            <img class=" col someClass" src={{profilePicture}} alt="Your Profile Picture">
-        </div>
     </div>
+    {{/if}}
 </header>
 
 <body>
@@ -38,7 +43,7 @@
                 <center>
                     <h2 class="p-1">NotePad</h2>
                 </center>
-                <form action="/notes/write" method="post">
+                <form action="/notes" method="post">
                     <div class="p-3">
                         <input type="text" class="form-control" id="title" name="Title" placeholder="Title" required>
                     </div>

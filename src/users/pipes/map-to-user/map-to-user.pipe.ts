@@ -1,9 +1,4 @@
-import {
-  ArgumentMetadata,
-  Injectable,
-  NotFoundException,
-  PipeTransform,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, PipeTransform } from '@nestjs/common';
 import { UsersService } from '../../services/users.service';
 import { UserModel } from 'src/databases/models/user.model';
 
@@ -11,7 +6,7 @@ import { UserModel } from 'src/databases/models/user.model';
 export class MapToUserPipe implements PipeTransform {
   constructor(private usersService: UsersService) {}
 
-  transform(id: number, metadata: ArgumentMetadata): Promise<UserModel> {
+  transform(id: number): Promise<UserModel> {
     const user: Promise<UserModel> = this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException();

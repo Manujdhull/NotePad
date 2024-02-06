@@ -9,18 +9,22 @@ export const up: Migration = async ({ context: sequelize }) => {
       primaryKey: true,
       autoIncrement: true,
     },
+
     username: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
     createdAt: {
       type: DataTypes.DATE,
       default: DataTypes.NOW(),
     },
+
     updatedAt: {
       type: DataTypes.DATE,
       default: DataTypes.NOW(),

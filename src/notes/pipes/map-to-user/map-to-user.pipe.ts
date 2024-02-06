@@ -1,9 +1,4 @@
-import {
-  ArgumentMetadata,
-  Injectable,
-  NotFoundException,
-  PipeTransform,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, PipeTransform } from '@nestjs/common';
 import { NotesService } from '../../services/notes.service';
 import { NoteModel } from 'src/databases/models/note.model';
 
@@ -17,9 +12,9 @@ export class MapToUserNotesPipe implements PipeTransform {
    * @param metadata
    * @returns Promise<NoteModel>
    */
-  transform(id: number, metadata: ArgumentMetadata): Promise<NoteModel> {
-    const eid = Number(id);
-    const user = this.notesService.findOne(eid);
+  transform(id: number): Promise<NoteModel> {
+    const eid: number = Number(id);
+    const user: Promise<NoteModel> = this.notesService.findOne(eid);
     if (!user) {
       throw new NotFoundException();
     }

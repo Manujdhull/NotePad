@@ -1,5 +1,4 @@
 import { IsNumber, IsString } from 'class-validator';
-// import {} from '';
 export class CreateNotesDto {
   @IsString()
   public Title: string;

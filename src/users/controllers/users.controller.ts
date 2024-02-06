@@ -13,8 +13,7 @@ import {
   Render,
   UseGuards,
   Redirect,
-  UseInterceptors,
-  UploadedFile,
+  StreamableFile,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { UserDtoSignUp } from '../dtos/users.signup.dto';
@@ -23,88 +22,98 @@ import { UserModel } from 'src/databases/models/user.model';
 import { AuthGuard } from 'src/authentication/guard/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { UserDtoEmail } from '../dtos/users.email.dto';
+import { PictureDto } from '../dtos/users.picture.dto';
 import { AuthUser } from '../authUser.decorator';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-// import multer, { diskStorage } from 'multer';
-const multer = require('multer');
-import path, { extname } from 'path';
-import { diskStorage } from 'multer';
-// import { memoryStorage } from 'multer'
-
-const storage=diskStorage({
-  destination: './uploads/',
-  filename: (req, file, cb) => {
-    var randomName = Array(32).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-    console.log(randomName);
-    cb(null, `${randomName}${extname(file.originalname)}`)
-  }
-})
-// middleware
-// const Storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'Profiles')
-//   },
-//   filename(req, file, cb) {
-//     console.log(file);
-//     cb(null, Date.now() + path.extname(file.originalname))
-//   },
-// })
-
-// const upload= multer({storage:Storage})
+import { FileSystemStoredFile, FormDataRequest } from 'nestjs-form-data';
+import { Storage } from '@squareboat/nest-storage';
+import { randomUUID } from 'crypto';
+import { readFileSync } from 'fs';
 
 @ApiTags('user')
 @Controller('user')
 export class UsersController {
-  constructor(private usersService: UsersService) { }
-  // (transform:means structuring data as same of our dto)
-  // whitelist true means ignoring extra data
+  constructor(private usersService: UsersService) {}
   /**
    * creating new user
    * @param body
    * @returns : Promise<UserModel>
    */
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @Post('signUp')
+  @Post('signup')
   @Render('login')
   public async create(@Body() body: UserDtoSignUp): Promise<UserModel> {
-    console.log('my body in hbs sign up', body);
-    // return this.usersService.create(body.username, body.password);
     return this.usersService.createUser(body);
   }
 
-  // @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  /**
+   * funtion gives the user email & profilePicture
+   * @param authUser
+   * @returns :Promise<email:string,profile:string>
+   */
   @UseGuards(AuthGuard)
   @Get('profile')
   @Render('profile')
-  public async showEmailDisplay() {
-    console.log('my Email in hbs verifying email');
+  public async showEmailDisplay(
+    @AuthUser() authUser: UserModel,
+  ): Promise<{ email: string; profile: string }> {
+    const email = authUser.Email;
+    const profile = authUser.profilePicture;
+    return { email, profile };
   }
 
-
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  /**
+   * Adding user Email into database
+   * @param authUser
+   * @param userDtoEmail
+   * Return : Promise<void>
+   */
+  @UsePipes(new ValidationPipe())
   @UseGuards(AuthGuard)
-  @Post('profile')
-  @UseInterceptors(FileInterceptor('file', {storage: storage})
-  )
+  @Post('email')
   @Redirect('/notes')
-  public async verifyEmail(
+  public async Email(
     @AuthUser() authUser: UserModel,
     @Body() userDtoEmail: UserDtoEmail,
-    @UploadedFile() file
   ): Promise<void> {
-    console.log('my Email in hbs verifying email', userDtoEmail.Email);
-    console.log("file we want to upload is this ", file.path)
-    const profilePicture=String(file.path);
-    console.log("file we want to upload is this ", profilePicture)
-    if(!userDtoEmail.Email){
-      this.usersService.createUserProfile( authUser.id,profilePicture);
-    }
-    else if(!(file)){
-      this.usersService.createUserEmail(userDtoEmail.Email,authUser.id)
-    }
-    else{
-      this.usersService.createUserEmailProfile(userDtoEmail.Email, authUser.id,profilePicture);
-    }
+    this.usersService.createUserEmail(userDtoEmail.Email, authUser.id);
+  }
+
+  /**
+   * Storing file at local
+   * @param authUser
+   * @param picture
+   */
+  @UsePipes(new ValidationPipe())
+  @UseGuards(AuthGuard)
+  @Redirect('/notes')
+  @Post('profile')
+  @FormDataRequest({ storage: FileSystemStoredFile })
+  public async profile(
+    @AuthUser() authUser: UserModel,
+    @Body() picture: PictureDto,
+  ): Promise<void> {
+    const Path = `/profiles/${randomUUID()}.${picture.file.extension}`;
+    await Storage.disk('local').put(
+      Path,
+      readFileSync(picture.file.path),
+    );
+    await this.usersService.addImage(authUser, Path);
+  }
+
+  /**
+   * showing picture at hbs page with the use of streamableFile
+   * @param authUser
+   * @returns :Promise<StreamableFile>
+   */
+  @UseGuards(AuthGuard)
+  @Get('profile/picture')
+  public async avatar(
+    @AuthUser() authUser: UserModel,
+  ): Promise<StreamableFile> {
+    const picturePath:Buffer = await Storage.disk('local').get(
+      authUser.profilePicture,
+    );
+    return new StreamableFile(picturePath, { disposition: 'inline' });
   }
 
   /**
@@ -116,7 +125,6 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Get('list')
   public async findAll(): Promise<UserModel[]> {
-    // console.log('abscd', this.usersService);
     return await this.usersService.findAll();
   }
 

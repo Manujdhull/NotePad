@@ -12,32 +12,57 @@
     <style>
         .card {
             margin-top: 50px;
-            height: 20rem;
+            height: 30rem;
             background-color: rgba(168, 216, 239, 0.334);
         }
     </style>
 </head>
 
+<header class="head">
+    <a class="btn btn-primary m-3" href="/notes">Notes</a>
+</header>
+
 <body style="background-color: rgb(219, 196, 196);">
     <center>
-        <p class="text-center h1 fw-bold">Profile</p>
-        <main class="card px-5 py-2" style="width: 40rem;">
+        {{!-- <p class="text-center h1 fw-bold m-4">Profile</p> --}}
+        <main class="card px-5 py-2 shadow p-3 mb-5 rounded" style="width: 40rem;">
+            {{#if profile}}
+            <h2 class="shadow" style="background-color: rgb(145, 157, 168);">Profile Picture</h2>
+            <div class="d-flex flex-row align-items-center mb-4 row">
+                <div class="form-outline flex-fill mb-0 col rounded">
+                    <img class="shadow" src="profile/picture" alt="my-photo" style="border-radius: 100px;">
+                </div>
+            </div>
+            
+            {{else}}
             <form action="/user/profile" method="Post" enctype="multipart/form-data">
-                <div class="d-flex flex-row align-items-center mb-4">
-                    <div class="form-outline flex-fill mb-0">
-                        <input type="text" name="Email" id="form3Example1c" class="form-control m-4"
-                            style="background-color: blanchedalmond;" placeholder="Enter Your Email ID "/>
-                        <label class="form-label h5 " for="form3Example1c">Email</label>
+                <label class="form-label h5 " for="form3Example1c">Profile Picture</label>
+                <input type="file" name="file" id="form3Example1c" class="form-control m-4"
+                    style="background-color: blanchedalmond;" placeholder="Upload File" />
+                <button type="submit" class="m-3 btn btn-secondary">Upload Image</button>
+            </form> <hr>
+            {{/if}}
 
-                        <input type="file" name="file" id="form3Example1c" class="form-control m-4"
-                            style="background-color: blanchedalmond;" placeholder="Upload File"/>
-                        <label class="form-label h5 " for="form3Example1c">Profile Picture</label>
+            {{#if email}}
+            <div class="d-flex flex-row align-items-center mb-4 row">
+                <div class="form-outline flex-fill mb-0 col">
+                    <label class="form-label h3 m-3" for="form3Example1c">Your Email Id</label>
+                </div>
+                <label for="email" class="h5">{{email}}</label>
+            </div>
+
+            {{else}}
+            <form action="/user/email" method="Post">
+                <div class="d-flex flex-row align-items-center mb-4 row">
+                    <div class="form-outline flex-fill mb-0 col">
+                        <label class="form-label h5 " for="form3Example1c">Email</label>
+                        <input type="text" name="Email" id="form3Example1c" class="form-control m-4"
+                            style="background-color: blanchedalmond;" placeholder="Enter Your Email ID " />
                     </div>
+                    <button type="submit" class="m-3 btn btn-secondary">Update</button>
                 </div>
-                <div class="d-flex justify-content-center mx-4 mb-3 mt-5 mb-lg-4">
-                    <button type="submit" class="btn btn-primary btn-lg">Update</button>
-                </div>
-            </form>
+            </form> <hr>
+            {{/if}}
         </main>
     </center>
     <!-- Bootstrap JavaScript Libraries -->
@@ -50,3 +75,15 @@
 </body>
 
 </html>
+
+
+
+{{!-- ile: MemoryStoredFile {
+originalName: 'download.jpg',
+encoding: '7bit',
+busBoyMimeType: 'image/jpeg',
+buffer: <Buffer ff d8 ff e0 00 10 4a 46 49 46 00 01 01 00 00 01 00 01 00 00 ff db 00 84 00 09 06 07 08 07 06 09 08 07 08
+    0a 0a 09 0b 0d 16 0f 0d 0c 0c 0d 1b 14 15 10 ... 4150 more bytes>,
+    size: 4200,
+    fileType: { ext: 'jpg', mime: 'image/jpeg' }
+    } --}}
