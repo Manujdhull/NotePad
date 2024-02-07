@@ -93,10 +93,7 @@ export class UsersController {
     @Body() picture: PictureDto,
   ): Promise<void> {
     const Path = `/profiles/${randomUUID()}.${picture.file.extension}`;
-    await Storage.disk('local').put(
-      Path,
-      readFileSync(picture.file.path),
-    );
+    await Storage.disk('local').put(Path, readFileSync(picture.file.path));
     await this.usersService.addImage(authUser, Path);
   }
 
@@ -110,7 +107,7 @@ export class UsersController {
   public async avatar(
     @AuthUser() authUser: UserModel,
   ): Promise<StreamableFile> {
-    const picturePath:Buffer = await Storage.disk('local').get(
+    const picturePath: Buffer = await Storage.disk('local').get(
       authUser.profilePicture,
     );
     return new StreamableFile(picturePath, { disposition: 'inline' });

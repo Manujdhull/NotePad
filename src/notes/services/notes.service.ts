@@ -14,7 +14,7 @@ export class NotesService {
     private readonly usersService: UsersService,
     private readonly shareService: ShareService,
     private readonly mailService: MailService,
-  ) { }
+  ) {}
 
   /**
    * create notes of logged in user

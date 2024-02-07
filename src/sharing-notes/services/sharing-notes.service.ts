@@ -18,7 +18,7 @@ export class ShareService {
    * @returns Promise<SharedNoteModel>
    */
   public async sharingNote(
-    data: Pick<SharedNoteModel, 'senId' | 'sharedNoteId'>
+    data: Pick<SharedNoteModel, 'senId' | 'sharedNoteId'>,
   ): Promise<SharedNoteModel> {
     return this.sharedModel.build().set(data).save();
   }

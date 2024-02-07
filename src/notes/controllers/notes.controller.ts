@@ -105,7 +105,6 @@ export class NotesController {
   @Redirect('notes')
   public deleteNote(
     @Body('id', ParseIntPipe, MapToUserNotesPipe) notes: NoteModel,
-    @AuthUser() authUser: UserModel,
   ): Promise<number> {
     return this.notesService.deleteNote(notes.userid, notes.id);
   }
@@ -151,7 +150,8 @@ export class NotesController {
   @Render('share')
   public async openShare(@Param('id') sharedNoteId: number): Promise<object> {
     const data: UserModel[] = await this.userService.findAll();
-    const sameUserWhoShare = await this.notesService.findOne(sharedNoteId);
+    const sameUserWhoShare: NoteModel =
+      await this.notesService.findOne(sharedNoteId);
     const users: UserModel[] = data.filter(
       (data: UserModel): boolean => data.id !== sameUserWhoShare.userid,
     );

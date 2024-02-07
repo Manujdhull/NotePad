@@ -6,7 +6,6 @@ import {
   Body,
   UsePipes,
   ValidationPipe,
-  Query,
   Redirect,
 } from '@nestjs/common';
 import { AuthGuard } from '../../authentication/guard/auth.guard';
@@ -31,11 +30,7 @@ export class ShareController {
   @Post('notes')
   @UsePipes(ValidationPipe)
   @Redirect('/notes')
-  async sharingNotes(
-    @Body() data:any,
-    @AuthUser() authUser: UserModel,
-    @Query() _query:any,
-  ): Promise<void> {
+  async sharingNotes(@Body() data: any): Promise<void> {
     await this.shareService.sharingNote(data);
   }
 

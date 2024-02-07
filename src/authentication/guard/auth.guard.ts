@@ -33,8 +33,7 @@ export class AuthGuard implements CanActivate {
         payload.id as number,
       );
       request.user = user;
-    } catch {
-    }
+    } catch {}
     return true;
   }
 }

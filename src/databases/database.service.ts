@@ -9,10 +9,9 @@ import { models } from './models/application.model';
 @Injectable()
 export class DatabaseService implements SequelizeOptionsFactory {
   constructor(private configService: ConfigService) {}
-  public createSequelizeOptions(
-    connectionName?: string,
-  ): SequelizeModuleOptions | Promise<SequelizeModuleOptions> {
-    connectionName = connectionName || 'default';
+  public createSequelizeOptions() // connectionName?: string,
+  : SequelizeModuleOptions | Promise<SequelizeModuleOptions> {
+    // connectionName = connectionName || 'default';
     const config: SequelizeModuleOptions =
       this.configService.get<SequelizeModuleOptions>('databases.default');
     config.models = models;
