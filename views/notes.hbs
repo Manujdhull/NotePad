@@ -126,6 +126,7 @@
                         <th style="background-color: #9AC4A93A;">BODY</th>
                     </tr>
                     {{#each shareData}}
+                    {{#if this.Title}}
                     <tr>
                         <form action="/notes" method="POST">
                             <input type="hidden" name="update" value="DELETE">
@@ -140,6 +141,8 @@
                             </td>
                         </form>
                     </tr>
+                    {{else}}
+                    {{/if}}
                     {{/each}}
                 </table>
             </div>
