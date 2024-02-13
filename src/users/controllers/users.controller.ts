@@ -135,6 +135,7 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @Get(':id')
   public async findOne(
+    //implementing custom pipes to find user
     @Param('id', ParseIntPipe, MapToUserPipe) user: UserModel,
   ): Promise<UserModel> {
     return user;
