@@ -12,8 +12,8 @@ import { DatabaseModule } from './databases/database.module';
 import { EnvConfigModule } from './env-config/env-config.module';
 import { ProfileStorageModule } from './profile-storage/profile-storage.module';
 import { UserRepoModule } from './users/user-repo.module';
-import { CliCommandModule } from './cli-commands/command/cli-command.module';
-import { DestroyUserService } from './cli-commands/command/create-user/destroy-user.service';
+import { CliCommandModule } from './cli-commands/cli-command.module';
+import { DestroyUserService } from './cli-commands/command/destroy-user/destroy-user.service';
 import { CommandModule } from 'nestjs-command';
 import { LoggerMiddleware } from './app.middleware';
 
