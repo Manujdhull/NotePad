@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -12,6 +12,10 @@ import { DatabaseModule } from './databases/database.module';
 import { EnvConfigModule } from './env-config/env-config.module';
 import { ProfileStorageModule } from './profile-storage/profile-storage.module';
 import { UserRepoModule } from './users/user-repo.module';
+import { CliCommandModule } from './cli-commands/command/cli-command.module';
+import { DestroyUserService } from './cli-commands/command/create-user/destroy-user.service';
+import { CommandModule } from 'nestjs-command';
+import { LoggerMiddleware } from './app.middleware';
 
 @Module({
   imports: [
@@ -24,8 +28,14 @@ import { UserRepoModule } from './users/user-repo.module';
     DatabaseModule,
     ProfileStorageModule,
     UserRepoModule,
+    CliCommandModule,
+    CommandModule,
   ],
   controllers: [AppController, ShareController],
-  providers: [AppService, JwtService],
+  providers: [AppService, JwtService, DestroyUserService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
