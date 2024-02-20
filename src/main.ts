@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { useContainer } from 'class-validator';
 import { join } from 'path';
-import * as methodOverride from 'method-override';
+// import * as methodOverride from 'method-override';
 import * as bodyParser from 'body-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -27,16 +27,16 @@ async function bootstrap() {
 
   //methodOverride (getter , option)
   // middleware for override the request.method
-  app.use(
-    methodOverride(function (req): any {
-      if (req.body && typeof req.body === 'object' && 'update' in req.body) {
-        const updating: any = req.body.update;
-        console.log(updating, req.body.update);
-        delete req.body.update;
-        return updating;
-      }
-    }),
-  );
+  // app.use(
+  //   methodOverride(function (req): any {
+  //     if (req.body && typeof req.body === 'object' && 'update' in req.body) {
+  //       const updating: any = req.body.update;
+  //       console.log(updating, req.body.update);
+  //       delete req.body.update;
+  //       return updating;
+  //     }
+  //   }),
+  // );
   await app.listen(3030);
 }
 bootstrap();
