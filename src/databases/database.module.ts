@@ -1,8 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { DatabaseService } from './database.service';
+import { modelProviders } from './model-config';
 
+@Global()
 @Module({
   imports: [
     SequelizeModule.forRootAsync({
@@ -10,7 +12,9 @@ import { DatabaseService } from './database.service';
       imports: [ConfigModule],
       name: 'default',
     }),
+    modelProviders,
   ],
   providers: [ConfigService, DatabaseService],
+  exports: [modelProviders],
 })
 export class DatabaseModule {}
