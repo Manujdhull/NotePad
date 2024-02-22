@@ -11,8 +11,8 @@ import { HashRepoModule } from './hash-repo.module';
     UserRepoModule,
     HashRepoModule,
     JwtModule.register({
+      signOptions: { expiresIn: '3d' },
       global: true,
-      signOptions: { expiresIn: '3600s' },
     }),
   ],
   providers: [AuthService, JwtService],
