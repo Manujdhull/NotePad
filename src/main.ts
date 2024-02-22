@@ -7,6 +7,9 @@ import * as bodyParser from 'body-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+// import { session } from 'passport';
+import * as session from 'express-session';
+import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -37,6 +40,17 @@ async function bootstrap() {
   //     }
   //   }),
   // );
-  await app.listen(3030);
+  app.use(
+    session({
+      secret: 'asiodasjoddjdoasddasoidjasiodasdjaiodd',
+      saveUninitialized: false,
+      resave: false,
+      cookie: {
+        maxAge: 600000,
+      },
+    }),
+  );
+  app.use(passport.initialize());
+  await app.listen(8080);
 }
 bootstrap();
