@@ -32,6 +32,7 @@ export class AuthService {
     pass: string,
   ): Promise<{ access_token: string } | string> {
     const user: UserModel = await this.usersService.findByUsername(username);
+    console.log('user', user);
     if (user) {
       const match = await this.hashService.hashMatch(pass, user?.password);
       //if token not match throw exception
@@ -52,6 +53,21 @@ export class AuthService {
       return accesToken.access_token;
     } else {
       return 'User doesnot exist';
+    }
+  }
+
+  public async getUserFromToken(token) {
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: jwtConstants.secret,
+      });
+      const user: UserModel = await this.usersService.findOne(payload.id);
+      return user;
+    } catch {
+      throw new UnauthorizedException();
     }
   }
 
