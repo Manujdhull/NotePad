@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+// import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -13,9 +14,10 @@ import { EnvConfigModule } from './env-config/env-config.module';
 import { ProfileStorageModule } from './profile-storage/profile-storage.module';
 import { UserRepoModule } from './users/user-repo.module';
 import { CliCommandModule } from './cli-commands/cli-command.module';
-import { DestroyUserService } from './cli-commands/command/destroy-user/destroy-user.service';
 import { CommandModule } from 'nestjs-command';
 import { LoggerMiddleware } from './app.middleware';
+import { OAuthModule } from './googleOauth/oauth.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -30,9 +32,11 @@ import { LoggerMiddleware } from './app.middleware';
     UserRepoModule,
     CliCommandModule,
     CommandModule,
+    OAuthModule,
+    PassportModule.register({ session: true }),
   ],
   controllers: [AppController, ShareController],
-  providers: [AppService, JwtService, DestroyUserService],
+  providers: [AppService, JwtService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
